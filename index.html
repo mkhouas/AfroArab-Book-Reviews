@@ -1,2363 +1,830 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📚 مرصد كتب الشأن العربي - تحديث يومي</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
-
-        :root {
-            --primary: #d4a017;
-            --primary-light: #f0c040;
-            --secondary: #c0392b;
-            --accent: #e8b829;
-            --dark: #0a0a0f;
-            --darker: #050508;
-            --card-bg: rgba(12, 12, 20, 0.92);
-            --card-border: rgba(212, 160, 23, 0.08);
-            --text: #e8e8e8;
-            --text-muted: #7a8a9a;
-            --text-bright: #ffffff;
-            --success: #2ecc71;
-            --info: #3498db;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --gradient-gold: linear-gradient(135deg, #d4a017, #f0c040, #d4a017);
-            --gradient-fire: linear-gradient(135deg, #e74c3c, #f39c12);
-            --gradient-ocean: linear-gradient(135deg, #1a5276, #2980b9);
-            --gradient-emerald: linear-gradient(135deg, #145a32, #27ae60);
-            --shadow-gold: 0 0 30px rgba(212, 160, 23, 0.15);
-            --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Tajawal', sans-serif;
-            background: var(--darker);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* === الخلفية المتحركة === */
-        .bg-animation {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            background:
-                radial-gradient(ellipse at 15% 30%, rgba(212,160,23,0.06) 0%, transparent 60%),
-                radial-gradient(ellipse at 85% 70%, rgba(192,57,43,0.05) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 50%, rgba(26,82,118,0.04) 0%, transparent 70%);
-        }
-
-        .bg-animation .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: orbFloat 25s ease-in-out infinite;
-        }
-
-        .bg-animation .orb:nth-child(1) {
-            width: 500px; height: 500px;
-            background: rgba(212,160,23,0.04);
-            top: -10%; right: -5%;
-        }
-
-        .bg-animation .orb:nth-child(2) {
-            width: 400px; height: 400px;
-            background: rgba(192,57,43,0.03);
-            bottom: -10%; left: -5%;
-            animation-delay: -8s;
-        }
-
-        .bg-animation .orb:nth-child(3) {
-            width: 350px; height: 350px;
-            background: rgba(26,82,118,0.04);
-            top: 40%; left: 40%;
-            animation-delay: -16s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(50px, -30px) scale(1.1); }
-            50% { transform: translate(-30px, 50px) scale(0.95); }
-            75% { transform: translate(30px, 30px) scale(1.05); }
-        }
-
-        .particles {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .particles span {
-            position: absolute;
-            width: 3px; height: 3px;
-            background: rgba(212,160,23,0.3);
-            border-radius: 50%;
-            animation: particleFall linear infinite;
-        }
-
-        @keyframes particleFall {
-            0% { transform: translateY(-10vh); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(110vh); opacity: 0; }
-        }
-
-        /* === شريط التحديث العلوي === */
-        .update-bar {
-            position: relative;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 25px;
-            background: linear-gradient(135deg, rgba(26,82,118,0.3), rgba(212,160,23,0.15));
-            border-bottom: 1px solid rgba(212,160,23,0.15);
-            backdrop-filter: blur(20px);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .update-bar .update-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .update-bar .live-indicator {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.82em;
-            font-weight: 700;
-        }
-
-        .update-bar .live-indicator.online {
-            color: var(--success);
-        }
-
-        .update-bar .live-indicator.updating {
-            color: var(--warning);
-        }
-
-        .update-bar .live-indicator .live-dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            animation: liveDot 1.5s infinite;
-        }
-
-        .update-bar .live-indicator.online .live-dot {
-            background: var(--success);
-        }
-
-        .update-bar .live-indicator.updating .live-dot {
-            background: var(--warning);
-            animation: spinDot 1s linear infinite;
-        }
-
-        @keyframes liveDot {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46,204,113,0.5); }
-            50% { transform: scale(1.3); box-shadow: 0 0 0 6px rgba(46,204,113,0); }
-        }
-
-        @keyframes spinDot {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .update-bar .last-update-text {
-            font-size: 0.82em;
-            color: var(--text-muted);
-        }
-
-        .update-bar .last-update-text span {
-            color: var(--primary-light);
-            font-weight: 700;
-        }
-
-        .update-bar .update-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .update-bar .countdown-box {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,0,0,0.3);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .update-bar .countdown-box .cd-label {
-            color: var(--text-muted);
-        }
-
-        .update-bar .countdown-box .cd-time {
-            color: var(--accent);
-            font-weight: 800;
-            font-variant-numeric: tabular-nums;
-            min-width: 70px;
-            text-align: center;
-        }
-
-        .refresh-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: 1px solid rgba(212,160,23,0.3);
-            background: linear-gradient(135deg, rgba(212,160,23,0.15), rgba(212,160,23,0.05));
-            color: var(--primary-light);
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.85em;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-
-        .refresh-btn:hover {
-            background: linear-gradient(135deg, rgba(212,160,23,0.3), rgba(212,160,23,0.15));
-            transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(212,160,23,0.2);
-        }
-
-        .refresh-btn:active {
-            transform: scale(0.97);
-        }
-
-        .refresh-btn.spinning .refresh-icon {
-            animation: spinRefresh 1s linear infinite;
-        }
-
-        .refresh-btn .refresh-icon {
-            font-size: 1.1em;
-            transition: transform 0.3s;
-        }
-
-        @keyframes spinRefresh {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .auto-update-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8em;
-            color: var(--text-muted);
-        }
-
-        .auto-update-toggle .toggle-switch {
-            position: relative;
-            width: 40px;
-            height: 22px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 11px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .auto-update-toggle .toggle-switch.active {
-            background: rgba(46,204,113,0.4);
-        }
-
-        .auto-update-toggle .toggle-switch .toggle-knob {
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 18px; height: 18px;
-            background: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .auto-update-toggle .toggle-switch.active .toggle-knob {
-            right: 20px;
-            background: var(--success);
-        }
-
-        /* === شريط تقدم التحديث === */
-        .update-progress {
-            position: relative;
-            z-index: 100;
-            height: 3px;
-            background: rgba(212,160,23,0.1);
-            overflow: hidden;
-        }
-
-        .update-progress .progress-bar {
-            height: 100%;
-            background: var(--gradient-gold);
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .update-progress .progress-bar.active {
-            animation: progressAnim 2s ease-in-out;
-        }
-
-        @keyframes progressAnim {
-            0% { width: 0%; }
-            30% { width: 40%; }
-            60% { width: 70%; }
-            80% { width: 90%; }
-            100% { width: 100%; }
-        }
-
-        /* === الهيدر === */
-        .hero-header {
-            position: relative;
-            z-index: 10;
-            padding: 40px 20px 35px;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(212,160,23,0.06) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(212,160,23,0.08);
-        }
-
-        .hero-header .header-badges {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
-
-        .hero-header .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 16px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 700;
-        }
-
-        .badge-live {
-            background: rgba(231,76,60,0.15);
-            border: 1px solid rgba(231,76,60,0.3);
-            color: #e74c3c;
-        }
-
-        .badge-live .dot {
-            width: 7px; height: 7px;
-            background: #e74c3c;
-            border-radius: 50%;
-            animation: liveDot 1.5s infinite;
-        }
-
-        .badge-auto {
-            background: rgba(46,204,113,0.12);
-            border: 1px solid rgba(46,204,113,0.25);
-            color: var(--success);
-        }
-
-        .badge-count {
-            background: rgba(212,160,23,0.12);
-            border: 1px solid rgba(212,160,23,0.2);
-            color: var(--primary-light);
-        }
-
-        .hero-header h1 {
-            font-size: 2.8em;
-            font-weight: 900;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            line-height: 1.3;
-        }
-
-        .hero-header .subtitle {
-            font-size: 1.1em;
-            color: var(--text-muted);
-            max-width: 800px;
-            margin: 0 auto 15px;
-            line-height: 1.7;
-        }
-
-        .hero-header .update-schedule {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(12,12,20,0.6);
-            border: 1px solid rgba(212,160,23,0.12);
-            padding: 10px 22px;
-            border-radius: 30px;
-            font-size: 0.88em;
-            color: var(--text-muted);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .hero-header .update-schedule .schedule-highlight {
-            color: var(--accent);
-            font-weight: 800;
-        }
-
-        .hero-header .update-schedule .divider {
-            width: 1px;
-            height: 16px;
-            background: rgba(255,255,255,0.15);
-        }
-
-        /* === الإحصائيات === */
-        .stats-strip {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            background: rgba(10,10,15,0.9);
-            border-bottom: 1px solid rgba(212,160,23,0.06);
-            flex-wrap: wrap;
-            backdrop-filter: blur(20px);
-        }
-
-        .stat-box {
-            padding: 20px 32px;
-            text-align: center;
-            border-left: 1px solid rgba(255,255,255,0.03);
-            transition: all 0.3s;
-        }
-
-        .stat-box:last-child { border-left: none; }
-
-        .stat-box:hover { background: rgba(212,160,23,0.04); }
-
-        .stat-box .stat-num {
-            font-size: 2em;
-            font-weight: 900;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-        }
-
-        .stat-box .stat-lbl {
-            font-size: 0.8em;
-            color: var(--text-muted);
-            margin-top: 3px;
-        }
-
-        /* === أدوات التحكم === */
-        .controls-area {
-            position: relative;
-            z-index: 10;
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 25px 25px 8px;
-        }
-
-        .search-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .search-wrapper {
-            flex: 1;
-            min-width: 280px;
-            position: relative;
-        }
-
-        .search-wrapper input {
-            width: 100%;
-            padding: 13px 22px 13px 48px;
-            border-radius: 16px;
-            border: 1px solid rgba(212,160,23,0.12);
-            background: rgba(12,12,20,0.95);
-            color: var(--text);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.95em;
-            transition: all 0.3s;
-        }
-
-        .search-wrapper input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(212,160,23,0.1);
-        }
-
-        .search-wrapper input::placeholder { color: var(--text-muted); }
-
-        .search-wrapper .s-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.4;
-        }
-
-        .sort-select {
-            padding: 13px 18px;
-            border-radius: 16px;
-            border: 1px solid rgba(212,160,23,0.12);
-            background: rgba(12,12,20,0.95);
-            color: var(--text);
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.9em;
-            cursor: pointer;
-            min-width: 170px;
-        }
-
-        .sort-select:focus { outline: none; border-color: var(--primary); }
-
-        .view-switcher {
-            display: flex;
-            gap: 3px;
-            background: rgba(12,12,20,0.95);
-            padding: 3px;
-            border-radius: 13px;
-            border: 1px solid rgba(212,160,23,0.08);
-        }
-
-        .v-btn {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 10px;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s;
-        }
-
-        .v-btn.active {
-            background: rgba(212,160,23,0.15);
-            color: var(--primary-light);
-        }
-
-        .filters-row {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .f-chip {
-            padding: 8px 18px;
-            border-radius: 22px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: rgba(12,12,20,0.8);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.85em;
-            font-weight: 500;
-            transition: all 0.3s;
-            user-select: none;
-        }
-
-        .f-chip:hover {
-            border-color: var(--primary);
-            color: var(--primary-light);
-        }
-
-        .f-chip.active {
-            background: var(--gradient-gold);
-            color: var(--dark);
-            border-color: transparent;
-            font-weight: 700;
-            box-shadow: 0 3px 12px rgba(212,160,23,0.2);
-        }
-
-        .region-chips {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-
-        .r-chip {
-            padding: 7px 15px;
-            border-radius: 18px;
-            border: 1px solid rgba(26,82,118,0.15);
-            background: rgba(26,82,118,0.08);
-            color: var(--text-muted);
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.82em;
-            transition: all 0.3s;
-        }
-
-        .r-chip:hover, .r-chip.active {
-            background: rgba(26,82,118,0.25);
-            border-color: var(--info);
-            color: #5dade2;
-        }
-
-        .results-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0 12px;
-            color: var(--text-muted);
-            font-size: 0.88em;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .results-bar .ct span {
-            color: var(--primary-light);
-            font-weight: 800;
-        }
-
-        .results-bar .tr {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.82em;
-            color: var(--success);
-        }
-
-        .results-bar .tr .pd {
-            width: 6px; height: 6px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: liveDot 2s infinite;
-        }
-
-        /* === شبكة الكتب === */
-        .books-container {
-            position: relative;
-            z-index: 10;
-            max-width: 1500px;
-            margin: 0 auto;
-            padding: 0 25px 40px;
-        }
-
-        .books-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
-            gap: 20px;
-        }
-
-        .books-grid.list-mode {
-            grid-template-columns: 1fr;
-        }
-
-        /* === بطاقة الكتاب === */
-        .book-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            position: relative;
-        }
-
-        .book-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 3px;
-            background: var(--gradient-gold);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .book-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(212,160,23,0.2);
-            box-shadow: var(--shadow-gold), var(--shadow-card);
-        }
-
-        .book-card:hover::before { opacity: 1; }
-
-        .book-card .ct {
-            display: flex;
-            gap: 16px;
-            padding: 20px 20px 10px;
-        }
-
-        .book-card .cw {
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .book-card .cv {
-            width: 100px;
-            height: 142px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.8em;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
-
-        .book-card .cv .sp {
-            position: absolute;
-            right: 0; top: 0;
-            width: 4px; height: 100%;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .book-card .cv .sh {
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 50%, transparent 60%);
-            animation: shineM 4s ease-in-out infinite;
-        }
-
-        @keyframes shineM {
-            0%, 100% { transform: translateX(-30%) translateY(-30%); }
-            50% { transform: translateX(30%) translateY(30%); }
-        }
-
-        .book-card .db {
-            position: absolute;
-            top: -5px; right: -5px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 0.62em;
-            font-weight: 800;
-            color: white;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-            white-space: nowrap;
-        }
-
-        .book-card .db.new-badge { background: var(--gradient-fire); }
-        .book-card .db.old-badge { background: var(--gradient-ocean); }
-
-        .book-card .ci { flex: 1; min-width: 0; }
-
-        .book-card .bt {
-            font-size: 1.12em;
-            font-weight: 800;
-            color: var(--text-bright);
-            line-height: 1.5;
-            margin-bottom: 3px;
-        }
-
-        .book-card .be {
-            font-size: 0.8em;
-            color: var(--primary);
-            font-style: italic;
-            margin-bottom: 7px;
-            direction: ltr;
-            text-align: right;
-            opacity: 0.8;
-        }
-
-        .book-card .al {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.9em;
-            margin-bottom: 3px;
-        }
-
-        .book-card .al .an { color: var(--info); font-weight: 600; }
-
-        .book-card .pl {
-            font-size: 0.8em;
-            color: var(--text-muted);
-        }
-
-        .book-card .cb { padding: 0 20px 10px; }
-
-        .book-card .mg {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            margin-bottom: 8px;
-        }
-
-        .book-card .mi {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.8em;
-            color: var(--text-muted);
-        }
-
-        .book-card .mi .mv { color: var(--text); font-weight: 500; }
-
-        .book-card .tr2 {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-
-        .tg {
-            padding: 2px 9px;
-            border-radius: 9px;
-            font-size: 0.7em;
-            font-weight: 600;
-        }
-
-        .tg-c { background: rgba(52,152,219,0.12); color: #5dade2; border: 1px solid rgba(52,152,219,0.15); }
-        .tg-r { background: rgba(243,156,18,0.12); color: #f5b041; border: 1px solid rgba(243,156,18,0.15); }
-        .tg-l { background: rgba(46,204,113,0.12); color: #58d68d; border: 1px solid rgba(46,204,113,0.15); }
-        .tg-n { background: rgba(231,76,60,0.15); color: #ec7063; border: 1px solid rgba(231,76,60,0.2); animation: pls 2s infinite; }
-        .tg-b { background: rgba(212,160,23,0.15); color: var(--primary-light); border: 1px solid rgba(212,160,23,0.2); }
-
-        @keyframes pls { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-
-        .book-card .dx {
-            font-size: 0.83em;
-            color: var(--text-muted);
-            line-height: 1.6;
-            padding: 9px 12px;
-            background: rgba(255,255,255,0.02);
-            border-radius: 10px;
-            border-right: 3px solid var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .book-card .cr {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-
-        .ctg {
-            padding: 2px 7px;
-            border-radius: 7px;
-            font-size: 0.7em;
-            background: rgba(255,255,255,0.04);
-            color: var(--text-muted);
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .book-card .cf {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px 16px;
-            border-top: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .rd { display: flex; align-items: center; gap: 5px; }
-        .rd .st { color: var(--accent); font-size: 0.83em; letter-spacing: 1px; }
-        .rd .rv { color: var(--text-muted); font-size: 0.8em; }
-
-        .ca { display: flex; gap: 5px; }
-
-        .ab {
-            padding: 5px 13px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.76em;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .ab:hover {
-            background: rgba(212,160,23,0.1);
-            border-color: var(--primary);
-            color: var(--primary-light);
-        }
-
-        .ab.sv {
-            background: rgba(231,76,60,0.12);
-            border-color: rgba(231,76,60,0.25);
-            color: var(--danger);
-        }
-
-        .ab.sh:hover {
-            background: rgba(52,152,219,0.1);
-            border-color: var(--info);
-            color: var(--info);
-        }
-
-        /* === الخريطة === */
-        .map-section {
-            position: relative;
-            z-index: 10;
-            max-width: 1500px;
-            margin: 20px auto 40px;
-            padding: 0 25px;
-        }
-
-        .map-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 30px;
-        }
-
-        .map-card .mt2 {
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: 800;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 6px;
-        }
-
-        .map-card .ms {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.88em;
-            margin-bottom: 22px;
-        }
-
-        .cg {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 9px;
-        }
-
-        .cc {
-            padding: 14px 8px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .cc:hover {
-            background: rgba(212,160,23,0.08);
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .cc .cf2 { font-size: 2em; margin-bottom: 4px; }
-        .cc .cn { font-weight: 700; color: var(--text-bright); font-size: 0.85em; }
-        .cc .co { font-size: 0.72em; color: var(--primary); margin-top: 2px; font-weight: 600; }
-
-        /* === لا نتائج === */
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 70px 20px;
-        }
-
-        .no-results .ni { font-size: 4em; margin-bottom: 12px; opacity: 0.4; }
-        .no-results h3 { font-size: 1.4em; color: var(--text-bright); margin-bottom: 8px; }
-        .no-results p { color: var(--text-muted); }
-
-        /* === العناصر الثابتة === */
-        .reading-fab {
-            position: fixed;
-            bottom: 22px; right: 22px;
-            z-index: 500;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 13px 22px;
-            border-radius: 28px;
-            background: var(--gradient-ocean);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.92em;
-            font-weight: 700;
-            box-shadow: 0 8px 28px rgba(26,82,118,0.4);
-            transition: all 0.3s;
-        }
-
-        .reading-fab:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 38px rgba(26,82,118,0.5);
-        }
-
-        .reading-fab .fb { background: var(--danger); padding: 2px 8px; border-radius: 10px; font-size: 0.8em; }
-
-        .scroll-up {
-            position: fixed;
-            bottom: 22px; left: 22px;
-            z-index: 500;
-            width: 46px; height: 46px;
-            border-radius: 50%;
-            background: var(--gradient-gold);
-            color: var(--dark);
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            font-weight: 900;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 18px rgba(212,160,23,0.3);
-            transition: all 0.3s;
-        }
-
-        .scroll-up.show { display: flex; }
-        .scroll-up:hover { transform: translateY(-3px); }
-
-        /* === الإشعار === */
-        .toast-msg {
-            position: fixed;
-            top: 20px; left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            padding: 13px 32px;
-            border-radius: 14px;
-            color: white;
-            font-weight: 700;
-            z-index: 3000;
-            transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 8px 28px rgba(0,0,0,0.3);
-            font-size: 0.92em;
-            backdrop-filter: blur(15px);
-        }
-
-        .toast-msg.success { background: linear-gradient(135deg, rgba(39,174,96,0.95), rgba(46,204,113,0.95)); }
-        .toast-msg.info { background: linear-gradient(135deg, rgba(41,128,185,0.95), rgba(52,152,219,0.95)); }
-        .toast-msg.warning { background: linear-gradient(135deg, rgba(243,156,18,0.95), rgba(230,126,34,0.95)); }
-        .toast-msg.visible { transform: translateX(-50%) translateY(0); }
-
-        /* === النافذة المنبثقة === */
-        .modal-bg {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(12px);
-        }
-
-        .modal-bg.open { display: flex; }
-
-        .modal-panel {
-            background: var(--dark);
-            border: 1px solid rgba(212,160,23,0.15);
-            border-radius: 20px;
-            padding: 28px;
-            max-width: 600px;
-            width: 92%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-
-        .modal-panel::-webkit-scrollbar { width: 5px; }
-        .modal-panel::-webkit-scrollbar-track { background: transparent; }
-        .modal-panel::-webkit-scrollbar-thumb { background: rgba(212,160,23,0.2); border-radius: 3px; }
-
-        .mh {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(212,160,23,0.1);
-        }
-
-        .mh h2 {
-            font-size: 1.3em;
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .mh .cm {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 1.5em;
-            cursor: pointer;
-            width: 38px; height: 38px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .mh .cm:hover {
-            background: rgba(231,76,60,0.1);
-            color: var(--danger);
-        }
-
-        .ri {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-radius: 11px;
-            background: rgba(255,255,255,0.02);
-            margin-bottom: 7px;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: all 0.3s;
-        }
-
-        .ri:hover {
-            background: rgba(212,160,23,0.04);
-            border-color: rgba(212,160,23,0.1);
-        }
-
-        .ri .rt { font-weight: 700; color: var(--text-bright); font-size: 0.92em; }
-        .ri .rm { font-size: 0.76em; color: var(--text-muted); margin-top: 2px; }
-
-        .ri .rr {
-            background: rgba(231,76,60,0.1);
-            border: 1px solid rgba(231,76,60,0.2);
-            color: var(--danger);
-            padding: 5px 13px;
-            border-radius: 9px;
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 0.76em;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .ri .rr:hover { background: rgba(231,76,60,0.2); }
-
-        .es {
-            text-align: center;
-            padding: 45px 20px;
-        }
-
-        .es .ei { font-size: 3.5em; margin-bottom: 10px; opacity: 0.4; }
-        .es p { color: var(--text-muted); }
-        .es .eh { font-size: 0.8em; margin-top: 7px; color: var(--primary); }
-
-        /* === التذييل === */
-        .site-footer {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 35px 20px;
-            background: rgba(10,10,15,0.95);
-            border-top: 1px solid rgba(212,160,23,0.06);
-        }
-
-        .site-footer .ft { font-size: 1.05em; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
-
-        .site-footer .fd {
-            color: var(--text-muted);
-            font-size: 0.85em;
-            max-width: 600px;
-            margin: 0 auto 12px;
-            line-height: 1.7;
-        }
-
-        .site-footer .fn { font-size: 0.75em; color: rgba(255,255,255,0.2); margin-top: 12px; }
-
-        .flr {
-            display: flex;
-            justify-content: center;
-            gap: 22px;
-            flex-wrap: wrap;
-        }
-
-        .flr a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.83em;
-            transition: color 0.3s;
-        }
-
-        .flr a:hover { color: var(--primary-light); }
-
-        /* === Responsive === */
-        @media (max-width: 900px) {
-            .books-grid { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 768px) {
-            .hero-header h1 { font-size: 1.9em; }
-            .update-bar { flex-direction: column; align-items: stretch; text-align: center; }
-            .update-bar .update-left, .update-bar .update-right { justify-content: center; }
-            .stat-box { padding: 14px 18px; }
-            .stat-box .stat-num { font-size: 1.5em; }
-            .search-row { flex-direction: column; }
-            .sort-select { width: 100%; }
-            .book-card .ct { flex-direction: column; align-items: center; text-align: center; }
-            .book-card .be { text-align: center; }
-            .book-card .mg { grid-template-columns: 1fr; }
-            .cg { grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)); }
-            .reading-fab { bottom: 12px; right: 12px; padding: 10px 16px; font-size: 0.82em; }
-            .scroll-up { bottom: 12px; left: 12px; }
-        }
-
-        @media (max-width: 480px) {
-            .hero-header h1 { font-size: 1.5em; }
-            .hero-header { padding: 25px 12px; }
-            .controls-area { padding: 18px 12px 5px; }
-            .books-container { padding: 0 12px 25px; }
-            .f-chip { padding: 6px 12px; font-size: 0.78em; }
-            .book-card .cv { width: 82px; height: 115px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرصد مراجعات الكتب — الشؤون الأفريقية والعربية</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#f0f2f5;--card:#fff;--text:#1a1a2e;--text2:#555;
+--accent:#0d7377;--accent2:#14919b;--gold:#d4a017;
+--ar:#059669;--fr:#2563eb;--en:#7c3aed;
+--shadow:0 2px 20px rgba(0,0,0,.06);--radius:16px;
+}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
+
+/* ─── الترويسة ─── */
+.hero{background:linear-gradient(135deg,#0d1117 0%,#7c3aed 40%,#0d7377 100%);color:#fff;padding:44px 20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,.04) 0%,transparent 70%);animation:pulse 8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+.hero h1{font-size:2.1em;font-weight:800;position:relative}
+.hero .sub{font-size:1.05em;opacity:.85;margin-top:10px;position:relative;max-width:780px;margin-inline:auto}
+
+/* ─── الإحصائيات ─── */
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;max-width:1400px;margin:-28px auto 0;padding:0 20px;position:relative;z-index:2}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:18px 14px;text-align:center;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)}
+.stat-card .num{font-size:1.7em;font-weight:800}
+.stat-card .lbl{font-size:.78em;color:var(--text2);margin-top:2px}
+
+/* ─── الفلاتر ─── */
+.controls{max-width:1400px;margin:22px auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.search-box{flex:1;min-width:240px;padding:12px 20px;border-radius:50px;border:2px solid #e0e0e0;font-size:1em;outline:none;transition:border .3s;direction:rtl}
+.search-box:focus{border-color:var(--accent)}
+.filter-btn{padding:10px 22px;border-radius:50px;border:2px solid #e0e0e0;background:var(--card);cursor:pointer;font-size:.88em;font-weight:600;transition:all .3s}
+.filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.filter-btn.active-ar{background:var(--ar);color:#fff;border-color:var(--ar)}
+.filter-btn.active-fr{background:var(--fr);color:#fff;border-color:var(--fr)}
+.filter-btn.active-en{background:var(--en);color:#fff;border-color:var(--en)}
+
+/* ─── شريط التحديث ─── */
+.update-bar{max-width:1400px;margin:0 auto 14px;padding:0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.update-bar span{font-size:.84em;color:var(--text2)}
+.update-bar .live{display:flex;align-items:center;gap:6px;font-size:.84em;color:var(--accent);font-weight:600}
+.live-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.refresh-btn{padding:8px 20px;border-radius:50px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.84em;font-weight:600;transition:background .3s}
+.refresh-btn:hover{background:var(--accent2)}
+.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ─── التقدم ─── */
+.progress-bar{max-width:1400px;margin:0 auto 12px;padding:0 20px;display:none}
+.progress-track{height:4px;background:#e0e0e0;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--en));border-radius:4px;transition:width .4s}
+.progress-text{font-size:.78em;color:var(--text2);margin-top:4px;text-align:center}
+
+/* ─── شبكة البطاقات ─── */
+.reviews-grid{max-width:1400px;margin:0 auto;padding:0 20px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+
+/* ─── بطاقة المراجعة ─── */
+.review-card{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04);transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+.review-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.review-header{position:relative;padding:18px 18px 14px;border-bottom:1px solid #f0f0f0}
+.review-type-badge{display:inline-block;padding:3px 14px;border-radius:20px;font-size:.72em;font-weight:700;color:#fff;margin-bottom:8px}
+.type-review{background:linear-gradient(135deg,#e91e63,#ff5722)}
+.type-article{background:linear-gradient(135deg,#2196f3,#00bcd4)}
+.type-chapter{background:linear-gradient(135deg,#4caf50,#8bc34a)}
+.type-thesis{background:linear-gradient(135deg,#9c27b0,#e91e63)}
+.lang-badge{display:inline-block;padding:3px 12px;border-radius:20px;font-size:.72em;font-weight:700;color:#fff;margin-right:6px}
+.lang-ar{background:var(--ar)}.lang-fr{background:var(--fr)}.lang-en{background:var(--en)}
+
+.review-title{font-size:1.02em;font-weight:700;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.review-book-ref{font-size:.85em;color:var(--accent);font-weight:600;margin-bottom:6px;padding:8px 12px;background:#f0f9f9;border-radius:10px;border-right:3px solid var(--accent)}
+.review-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:.78em;color:var(--text2);margin-bottom:8px}
+.review-meta span{display:flex;align-items:center;gap:4px}
+.review-authors{font-size:.88em;color:#333;font-weight:500;margin-bottom:4px}
+.review-journal{font-size:.82em;color:var(--en);font-weight:600;margin-bottom:6px}
+
+.review-body{padding:0 18px 18px;flex:1;display:flex;flex-direction:column}
+.review-desc{font-size:.82em;color:var(--text2);line-height:1.7;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px}
+
+.review-topics{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.topic-tag{padding:3px 12px;border-radius:20px;font-size:.72em;background:#f0f7f7;color:var(--accent);font-weight:500}
+
+.review-actions{margin-top:auto;display:flex;gap:8px}
+.btn-link{flex:1;padding:10px;text-align:center;border-radius:12px;font-size:.84em;font-weight:600;text-decoration:none;transition:all .3s}
+.btn-primary{background:var(--text);color:#fff}
+.btn-primary:hover{background:var(--accent)}
+.btn-secondary{background:#f5f5f5;color:var(--text);border:1px solid #e0e0e0}
+.btn-secondary:hover{background:#eee}
+
+.loader{text-align:center;padding:60px;grid-column:1/-1}
+.spinner{width:50px;height:50px;border:4px solid #e0e0e0;border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.no-results{text-align:center;padding:60px;grid-column:1/-1;color:var(--text2)}
+.no-results .emoji{font-size:4em;margin-bottom:12px}
+
+/* ─── Footer ─── */
+footer{text-align:center;padding:30px 20px;font-size:.8em;color:var(--text2);border-top:1px solid #e0e0e0;max-width:1400px;margin:0 auto}
+.sources-toggle{background:none;border:1px solid #ddd;padding:6px 16px;border-radius:20px;cursor:pointer;font-size:.85em;margin-top:8px;color:var(--accent);font-weight:600}
+.sources-list{display:none;max-width:1200px;margin:12px auto;text-align:right;font-size:.78em;color:var(--text2);line-height:2;columns:3;column-gap:30px;padding:0 20px}
+.sources-list.open{display:block}
+
+@media(max-width:768px){
+ .hero h1{font-size:1.4em}
+ .reviews-grid{grid-template-columns:1fr}
+ .stats-bar{grid-template-columns:repeat(3,1fr)}
+ .sources-list{columns:1}
+}
+</style>
 </head>
 <body>
 
-    <div class="bg-animation">
-        <div class="orb"></div>
-        <div class="orb"></div>
-        <div class="orb"></div>
-    </div>
-    <div class="particles" id="particles"></div>
-    <div class="toast-msg" id="toastMsg"></div>
+<!-- ═══ الترويسة ═══ -->
+<div class="hero">
+<h1>📖 مرصد مراجعات الكتب للشؤون الأفريقية والعربية</h1>
+<p class="sub">جمع تلقائي يومي لمراجعات الكتب والدراسات النقدية المتعلقة بأفريقيا والعالم العربي والشرق الأوسط — تبقى المراجعة سنتين من تاريخ نشرها</p>
+</div>
 
-    <!-- شريط التحديث العلوي -->
-    <div class="update-bar" id="updateBar">
-        <div class="update-left">
-            <div class="live-indicator online" id="liveIndicator">
-                <span class="live-dot"></span>
-                <span id="liveText">مُحدَّث</span>
-            </div>
-            <div class="last-update-text">
-                آخر تحديث: <span id="lastUpdateTime">---</span>
-            </div>
-        </div>
-        <div class="update-right">
-            <div class="countdown-box">
-                <span class="cd-label">التحديث القادم:</span>
-                <span class="cd-time" id="countdown">--:--:--</span>
-            </div>
-            <div class="auto-update-toggle">
-                <span>تلقائي</span>
-                <div class="toggle-switch active" id="autoToggle" onclick="toggleAutoUpdate()">
-                    <div class="toggle-knob"></div>
-                </div>
-            </div>
-            <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()">
-                <span class="refresh-icon">🔄</span>
-                <span>تحديث الآن</span>
-            </button>
-        </div>
-    </div>
+<!-- ═══ الإحصائيات ═══ -->
+<div class="stats-bar" id="statsBar">
+<div class="stat-card"><div class="num" id="totalCount">-</div><div class="lbl">📊 إجمالي المراجعات</div></div>
+<div class="stat-card"><div class="num" id="arCount" style="color:var(--ar)">-</div><div class="lbl">🇸🇦 عربي</div></div>
+<div class="stat-card"><div class="num" id="frCount" style="color:var(--fr)">-</div><div class="lbl">🇫🇷 فرنسي</div></div>
+<div class="stat-card"><div class="num" id="enCount" style="color:var(--en)">-</div><div class="lbl">🇬🇧 إنجليزي</div></div>
+<div class="stat-card"><div class="num" id="journalCount" style="color:var(--gold)">-</div><div class="lbl">📰 الدوريات</div></div>
+<div class="stat-card"><div class="num" id="sourceCount">-</div><div class="lbl">📡 المصادر</div></div>
+</div>
 
-    <!-- شريط تقدم التحديث -->
-    <div class="update-progress" id="updateProgress">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+<!-- ═══ الفلاتر ═══ -->
+<div class="controls">
+<input type="text" class="search-box" id="searchInput" placeholder="🔍 ابحث عن مراجعة، كتاب، مؤلف، أو دورية ..." oninput="filterItems()">
+<button class="filter-btn active" onclick="setLang('all',this)">الكل</button>
+<button class="filter-btn" onclick="setLang('ar',this)">🇸🇦 عربي</button>
+<button class="filter-btn" onclick="setLang('fr',this)">🇫🇷 فرنسي</button>
+<button class="filter-btn" onclick="setLang('en',this)">🇬🇧 إنجليزي</button>
+<select class="search-box" style="flex:none;width:200px" id="topicSelect" onchange="filterItems()">
+ <option value="">📂 كل المواضيع</option>
+ <option value="Africa">أفريقيا</option>
+ <option value="North Africa">شمال أفريقيا</option>
+ <option value="Sahel">الساحل</option>
+ <option value="Horn of Africa">القرن الأفريقي</option>
+ <option value="West Africa">أفريقيا الغربية</option>
+ <option value="East Africa">أفريقيا الشرقية</option>
+ <option value="Central Africa">أفريقيا الوسطى</option>
+ <option value="Southern Africa">أفريقيا الجنوبية</option>
+ <option value="Arab World">العالم العربي</option>
+ <option value="Middle East">الشرق الأوسط</option>
+ <option value="Gulf">الخليج</option>
+ <option value="Sudan">السودان</option>
+ <option value="Security">الأمن والصراعات</option>
+ <option value="Migration">الهجرة</option>
+ <option value="Development">التنمية</option>
+ <option value="Politics">السياسة</option>
+ <option value="Gender">النوع الاجتماعي</option>
+ <option value="Islam">الإسلام</option>
+ <option value="Literature">الأدب</option>
+ <option value="History">التاريخ</option>
+</select>
+<select class="search-box" style="flex:none;width:180px" id="sortSelect" onchange="filterItems()">
+ <option value="date">الأحدث أولاً</option>
+ <option value="title">أبجدي (العنوان)</option>
+</select>
+</div>
 
-    <!-- الهيدر -->
-    <header class="hero-header">
-        <div class="header-badges">
-            <span class="badge badge-live"><span class="dot"></span> بث مباشر</span>
-            <span class="badge badge-auto">🔄 تحديث يومي تلقائي</span>
-            <span class="badge badge-count" id="badgeCount">📚 0 كتاب</span>
-        </div>
-        <h1>📚 مرصد كتب الشأن العربي</h1>
-        <p class="subtitle">
-            رصد يومي وتلقائي لأحدث الكتب الصادرة عن العالم العربي خلال آخر 12 شهراً.
-            يُستبعد تلقائياً كل كتاب تجاوز السنة ويُضاف الجديد يومياً.
-        </p>
-        <div class="update-schedule">
-            <span>⏰ موعد التحديث:</span>
-            <span class="schedule-highlight">يومياً الساعة 00:00</span>
-            <span class="divider"></span>
-            <span>📅 النطاق:</span>
-            <span class="schedule-highlight" id="dateRange">---</span>
-        </div>
-    </header>
+<!-- ═══ شريط التحديث ═══ -->
+<div class="update-bar">
+<div class="live"><span class="live-dot"></span> تحديث تلقائي يومي</div>
+<span id="lastUpdate">آخر تحديث: جارٍ التحميل...</span>
+<button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()">🔄 تحديث الآن</button>
+</div>
 
-    <!-- الإحصائيات -->
-    <div class="stats-strip">
-        <div class="stat-box">
-            <div class="stat-num" id="sTotal">0</div>
-            <div class="stat-lbl">كتاب متاح</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-num">22</div>
-            <div class="stat-lbl">دولة عربية</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-num" id="sNew">0</div>
-            <div class="stat-lbl">جديد هذا الشهر</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-num" id="sExpiring">0</div>
-            <div class="stat-lbl">ستُستبعد قريباً</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-num" id="sAuthors">0</div>
-            <div class="stat-lbl">مؤلف</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-num" id="sFavs">0</div>
-            <div class="stat-lbl">في قائمتك</div>
-        </div>
-    </div>
+<!-- ═══ التقدم ═══ -->
+<div class="progress-bar" id="progressBar">
+<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+<div class="progress-text" id="progressText">جارٍ الجلب...</div>
+</div>
 
-    <!-- أدوات التحكم -->
-    <div class="controls-area">
-        <div class="search-row">
-            <div class="search-wrapper">
-                <span class="s-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="ابحث بالعنوان، المؤلف، الدولة، الموضوع...">
-            </div>
-            <select class="sort-select" id="sortSelect" onchange="doSort()">
-                <option value="newest">📅 الأحدث</option>
-                <option value="oldest">📅 الأقدم</option>
-                <option value="rating">⭐ التقييم</option>
-                <option value="pages-d">📄 الأكثر صفحات</option>
-                <option value="pages-a">📄 الأقل صفحات</option>
-                <option value="expiring">⏳ تنتهي قريباً</option>
-                <option value="alpha">🔤 أبجدياً</option>
-            </select>
-            <div class="view-switcher">
-                <button class="v-btn active" onclick="setView('grid')" title="شبكي">▦</button>
-                <button class="v-btn" onclick="setView('list')" title="قائمة">☰</button>
-            </div>
-        </div>
+<!-- ═══ الشبكة ═══ -->
+<div class="reviews-grid" id="reviewsGrid">
+<div class="loader"><div class="spinner"></div><p>جارٍ جلب المراجعات من المصادر الأكاديمية...</p></div>
+</div>
 
-        <div class="filters-row" id="catF">
-            <button class="f-chip active" onclick="setCat('all',this)">📚 الكل</button>
-            <button class="f-chip" onclick="setCat('تاريخ',this)">🏛️ تاريخ</button>
-            <button class="f-chip" onclick="setCat('سياسة',this)">🏛️ سياسة</button>
-            <button class="f-chip" onclick="setCat('اقتصاد',this)">💰 اقتصاد</button>
-            <button class="f-chip" onclick="setCat('مجتمع',this)">👥 مجتمع</button>
-            <button class="f-chip" onclick="setCat('صراعات',this)">⚔️ صراعات</button>
-            <button class="f-chip" onclick="setCat('فكر',this)">💡 فكر</button>
-            <button class="f-chip" onclick="setCat('حقوق',this)">⚖️ حقوق</button>
-            <button class="f-chip" onclick="setCat('ثقافة',this)">🎭 ثقافة</button>
-        </div>
-
-        <div class="region-chips" id="regF">
-            <button class="r-chip active" onclick="setReg('all',this)">🌍 الكل</button>
-            <button class="r-chip" onclick="setReg('المشرق',this)">🌅 المشرق</button>
-            <button class="r-chip" onclick="setReg('الخليج',this)">🛢️ الخليج</button>
-            <button class="r-chip" onclick="setReg('المغرب العربي',this)">🌄 المغرب العربي</button>
-            <button class="r-chip" onclick="setReg('وادي النيل',this)">🏞️ وادي النيل</button>
-            <button class="r-chip" onclick="setReg('القرن الإفريقي',this)">🌍 القرن الإفريقي</button>
-            <button class="r-chip" onclick="setReg('شامل',this)">🌐 شامل</button>
-        </div>
-
-        <div class="results-bar">
-            <div class="ct" id="resText">عرض <span>0</span> كتاب</div>
-            <div class="tr">
-                <span class="pd"></span>
-                آخر 12 شهراً • يُحدَّث يومياً
-            </div>
-        </div>
-    </div>
-
-    <!-- الكتب -->
-    <div class="books-container">
-        <div class="books-grid" id="booksGrid"></div>
-    </div>
-
-    <!-- الخريطة -->
-    <div class="map-section">
-        <div class="map-card">
-            <h2 class="mt2">🗺️ خريطة التغطية</h2>
-            <p class="ms">اضغط على أي دولة للبحث عن كتبها</p>
-            <div class="cg" id="countriesGrid"></div>
-        </div>
-    </div>
-
-    <!-- التذييل -->
-    <footer class="site-footer">
-        <div class="ft">📚 مرصد كتب الشأن العربي</div>
-        <p class="fd">
-            مرصد يومي تلقائي • تُستبعد الكتب التي تجاوزت 12 شهراً • يُضاف الجديد تلقائياً
-        </p>
-        <div class="flr">
-            <a href="#">📖 اقتراح كتاب</a>
-            <a href="#">📧 تواصل معنا</a>
-            <a href="#">📋 عن المرصد</a>
-            <a href="#">🔗 المصادر</a>
-        </div>
-        <p class="fn">جميع البيانات مبنية على مصادر متاحة • يُنصح بالتحقق من الناشر الرسمي</p>
-    </footer>
-
-    <button class="reading-fab" onclick="openModal()">
-        📋 قائمة القراءة <span class="fb" id="fabBadge">0</span>
-    </button>
-
-    <button class="scroll-up" id="scrollUp" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆</button>
-
-    <!-- النافذة المنبثقة -->
-    <div class="modal-bg" id="modalBg">
-        <div class="modal-panel">
-            <div class="mh">
-                <h2>📋 قائمة القراءة</h2>
-                <button class="cm" onclick="closeModal()">✕</button>
-            </div>
-            <div id="modalBody"></div>
-        </div>
-    </div>
+<!-- ═══ Footer ═══ -->
+<footer>
+<p>مرصد مراجعات الكتب للشؤون الأفريقية والعربية © 2024–2026</p>
+<p>يجمع مراجعات الكتب تلقائيًّا من Crossref · OpenAlex · Semantic Scholar · Google Books · Open Library · DOAB وغيرها</p>
+<button class="sources-toggle" onclick="toggleSources()">📚 عرض قائمة المصادر والدوريات</button>
+<div class="sources-list" id="sourcesList"></div>
+</footer>
 
 <script>
-// ========== بيانات الكتب ==========
-const ALL_BOOKS = [
-    {
-        id:1, titleAr:"حرب المئة عام على فلسطين - طبعة محدثة 2024",
-        titleEn:"The Hundred Years' War on Palestine (Updated 2024)",
-        author:"رشيد الخالدي", authorEn:"Rashid Khalidi",
-        publishDate:"2024-03-15", publisher:"Picador / Metropolitan Books",
-        pages:368, language:"الإنجليزية", categories:["تاريخ","سياسة"],
-        region:"المشرق", countries:["فلسطين"],
-        coverColor:"linear-gradient(135deg,#0d1b2a,#1b263b,#415a77)",
-        coverIcon:"🇵🇸", rating:4.9,
-        description:"طبعة محدثة مع فصل جديد يغطي أحداث غزة 2023-2024. الأكثر مبيعاً عالمياً.",
-        isBestseller:true, tags:["الأكثر مبيعاً","غزة"]
-    },
-    {
-        id:2, titleAr:"المسألة العربية",
-        titleEn:"The Arab Question",
-        author:"رشيد الخالدي", authorEn:"Rashid Khalidi",
-        publishDate:"2024-09-10", publisher:"Princeton University Press",
-        pages:352, language:"الإنجليزية", categories:["تاريخ","فكر"],
-        region:"شامل", countries:["العالم العربي"],
-        coverColor:"linear-gradient(135deg,#003049,#005f73,#0a9396)",
-        coverIcon:"❓", rating:4.6,
-        description:"أحدث كتب الخالدي عن القومية العربية والهوية ومستقبل العروبة.",
-        isBestseller:false, tags:["قومية","هوية"]
-    },
-    {
-        id:3, titleAr:"التطهير العرقي في فلسطين - طبعة 2024",
-        titleEn:"The Ethnic Cleansing of Palestine (2024 Edition)",
-        author:"إيلان بابيه", authorEn:"Ilan Pappé",
-        publishDate:"2024-01-20", publisher:"Oneworld Publications",
-        pages:380, language:"الإنجليزية والعربية", categories:["تاريخ","حقوق"],
-        region:"المشرق", countries:["فلسطين"],
-        coverColor:"linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)",
-        coverIcon:"📕", rating:4.8,
-        description:"طبعة جديدة مع مقدمة تربط النكبة بأحداث اليوم. ترجم لـ25 لغة.",
-        isBestseller:true, tags:["نكبة","توثيق"]
-    },
-    {
-        id:4, titleAr:"غزة: سجل الإبادة",
-        titleEn:"Gaza: A Chronicle of Genocide",
-        author:"نورمان فينكلشتاين", authorEn:"Norman Finkelstein",
-        publishDate:"2024-06-01", publisher:"OR Books",
-        pages:310, language:"الإنجليزية", categories:["حقوق","سياسة"],
-        region:"المشرق", countries:["فلسطين","غزة"],
-        coverColor:"linear-gradient(135deg,#6b0000,#a00000,#cc3300)",
-        coverIcon:"🔴", rating:4.7,
-        description:"يوثق الحرب على غزة 2023-2024 بأدلة قانونية دولية.",
-        isBestseller:true, tags:["إبادة","قانون دولي"]
-    },
-    {
-        id:5, titleAr:"فلسطين: الإبادة والمقاومة",
-        titleEn:"Palestine: Genocide and Resistance",
-        author:"إيلان بابيه", authorEn:"Ilan Pappé",
-        publishDate:"2024-11-15", publisher:"Verso Books",
-        pages:290, language:"الإنجليزية", categories:["سياسة","حقوق"],
-        region:"المشرق", countries:["فلسطين","غزة"],
-        coverColor:"linear-gradient(135deg,#0d0d0d,#2d0000,#5c0000)",
-        coverIcon:"✊", rating:4.8,
-        description:"أحدث كتب بابيه: يوثق ما يصفه بالإبادة في غزة ويحلل المقاومة.",
-        isBestseller:true, tags:["إبادة","مقاومة"]
-    },
-    {
-        id:6, titleAr:"السودان: حرب بلا نهاية",
-        titleEn:"Sudan: War Without End",
-        author:"أليكس دو وال", authorEn:"Alex de Waal",
-        publishDate:"2024-05-20", publisher:"Hurst Publishers",
-        pages:384, language:"الإنجليزية", categories:["صراعات","سياسة"],
-        region:"وادي النيل", countries:["السودان"],
-        coverColor:"linear-gradient(135deg,#1a0a00,#3d1f00,#6b3500)",
-        coverIcon:"🇸🇩", rating:4.4,
-        description:"أشمل توثيق لحرب السودان 2023-2024 بين الجيش والدعم السريع.",
-        isBestseller:false, tags:["حرب 2023","دعم سريع"]
-    },
-    {
-        id:7, titleAr:"محمد بن سلمان: رؤية وسلطة - طبعة محدثة",
-        titleEn:"MBS: Vision and Power (Updated 2024)",
-        author:"بن هيوبارد", authorEn:"Ben Hubbard",
-        publishDate:"2024-02-10", publisher:"Tim Duggan Books",
-        pages:432, language:"الإنجليزية", categories:["سياسة","اقتصاد"],
-        region:"الخليج", countries:["السعودية"],
-        coverColor:"linear-gradient(135deg,#003d00,#006400,#008800)",
-        coverIcon:"🇸🇦", rating:4.3,
-        description:"تغطية محدثة لرؤية 2030 والتطبيع والدور السعودي الإقليمي.",
-        isBestseller:false, tags:["رؤية 2030","تحديث"]
-    },
-    {
-        id:8, titleAr:"لبنان: دولة على حافة الهاوية",
-        titleEn:"Lebanon: A State on the Brink",
-        author:"كيم غطاس", authorEn:"Kim Ghattas",
-        publishDate:"2024-07-15", publisher:"Henry Holt & Co",
-        pages:344, language:"الإنجليزية", categories:["سياسة","مجتمع"],
-        region:"المشرق", countries:["لبنان"],
-        coverColor:"linear-gradient(135deg,#8b0000,#cc0000,#006600)",
-        coverIcon:"🇱🇧", rating:4.5,
-        description:"تحليل عميق للانهيار اللبناني وتأثير حرب غزة على لبنان.",
-        isBestseller:false, tags:["انهيار","حزب الله"]
-    },
-    {
-        id:9, titleAr:"سوريا بعد الأسد: مستقبل مجهول",
-        titleEn:"Syria After Assad: An Uncertain Future",
-        author:"سام داغر", authorEn:"Sam Dagher",
-        publishDate:"2024-08-01", publisher:"Yale University Press",
-        pages:396, language:"الإنجليزية", categories:["سياسة","صراعات"],
-        region:"المشرق", countries:["سوريا"],
-        coverColor:"linear-gradient(135deg,#2d0000,#5c0000,#8b0000)",
-        coverIcon:"🇸🇾", rating:4.4,
-        description:"يحلل سيناريوهات مستقبل سوريا بعد سقوط نظام الأسد.",
-        isBestseller:false, tags:["ما بعد الأسد","إعادة إعمار"]
-    },
-    {
-        id:10, titleAr:"العراق: الدولة المنقسمة",
-        titleEn:"Iraq: The Divided State",
-        author:"توبي دودج", authorEn:"Toby Dodge",
-        publishDate:"2024-03-25", publisher:"Cambridge University Press",
-        pages:368, language:"الإنجليزية", categories:["سياسة","تاريخ"],
-        region:"المشرق", countries:["العراق"],
-        coverColor:"linear-gradient(135deg,#0a0a1a,#1a1a3a,#2a2a5a)",
-        coverIcon:"🇮🇶", rating:4.3,
-        description:"تحليل الانقسامات العراقية بعد 20 عاماً من الغزو الأمريكي.",
-        isBestseller:false, tags:["طائفية","نفوذ إيراني"]
-    },
-    {
-        id:11, titleAr:"مصر: الجمهورية الجديدة",
-        titleEn:"Egypt: The New Republic",
-        author:"عمرو حمزاوي", authorEn:"Amr Hamzawy",
-        publishDate:"2024-04-01", publisher:"دار الشروق - القاهرة",
-        pages:340, language:"العربية", categories:["سياسة","اقتصاد"],
-        region:"وادي النيل", countries:["مصر"],
-        coverColor:"linear-gradient(135deg,#3d2813,#654321,#8b6914)",
-        coverIcon:"🇪🇬", rating:4.2,
-        description:"قراءة نقدية في التحديات الاقتصادية والسياسية في مصر.",
-        isBestseller:false, tags:["اقتصاد","إصلاح"]
-    },
-    {
-        id:12, titleAr:"الإمارات: القوة الصاعدة",
-        titleEn:"The UAE: The Rising Power",
-        author:"أندرياس كريج", authorEn:"Andreas Krieg",
-        publishDate:"2024-05-15", publisher:"I.B. Tauris / Bloomsbury",
-        pages:328, language:"الإنجليزية", categories:["سياسة","اقتصاد"],
-        region:"الخليج", countries:["الإمارات"],
-        coverColor:"linear-gradient(135deg,#000050,#00008b,#0000cc)",
-        coverIcon:"🇦🇪", rating:4.3,
-        description:"تحليل صعود الإمارات: الذكاء الاصطناعي والطاقة المتجددة.",
-        isBestseller:false, tags:["قوة ناعمة","تكنولوجيا"]
-    },
-    {
-        id:13, titleAr:"اليمن: الحرب المنسية",
-        titleEn:"Yemen: The Forgotten War",
-        author:"هيلين لاكنر", authorEn:"Helen Lackner",
-        publishDate:"2024-01-10", publisher:"Hurst Publishers",
-        pages:352, language:"الإنجليزية", categories:["صراعات","مجتمع"],
-        region:"الخليج", countries:["اليمن"],
-        coverColor:"linear-gradient(135deg,#4a3013,#6b4420,#8b5a2d)",
-        coverIcon:"🇾🇪", rating:4.3,
-        description:"تغطية مستجدات الهدنة والأزمة الإنسانية الأسوأ في العالم.",
-        isBestseller:false, tags:["أزمة إنسانية","هدنة"]
-    },
-    {
-        id:14, titleAr:"حال الأمة العربية 2024-2025",
-        titleEn:"The State of the Arab Nation 2024-2025",
-        author:"المركز العربي للأبحاث", authorEn:"Arab Center for Research",
-        publishDate:"2024-11-01", publisher:"المركز العربي - الدوحة",
-        pages:520, language:"العربية", categories:["سياسة","مجتمع","اقتصاد"],
-        region:"شامل", countries:["جميع الدول العربية"],
-        coverColor:"linear-gradient(135deg,#001a33,#003366,#004d99)",
-        coverIcon:"🌍", rating:4.7,
-        description:"التقرير السنوي الأشمل: 22 دولة عربية مع فصل خاص عن حرب غزة.",
-        isBestseller:true, tags:["تقرير سنوي","22 دولة"]
-    },
-    {
-        id:15, titleAr:"المؤشر العربي 2024",
-        titleEn:"Arab Opinion Index 2024",
-        author:"المركز العربي للأبحاث", authorEn:"Arab Center for Research",
-        publishDate:"2024-10-15", publisher:"المركز العربي - الدوحة",
-        pages:550, language:"العربية والإنجليزية", categories:["مجتمع"],
-        region:"شامل", countries:["14 دولة عربية"],
-        coverColor:"linear-gradient(135deg,#250040,#4a0080,#6600b3)",
-        coverIcon:"📊", rating:4.8,
-        description:"أكبر استطلاع رأي عربي: 28,000 مستجيب من 14 دولة.",
-        isBestseller:false, tags:["استطلاع رأي","بحوث"]
-    },
-    {
-        id:16, titleAr:"الجزائر: الجمهورية الجديدة",
-        titleEn:"Algeria: The New Republic",
-        author:"ديروك كيلر", authorEn:"Derick Keller",
-        publishDate:"2024-06-20", publisher:"Éditions Karthala",
-        pages:312, language:"الفرنسية", categories:["سياسة","مجتمع"],
-        region:"المغرب العربي", countries:["الجزائر"],
-        coverColor:"linear-gradient(135deg,#003d1f,#006233,#008844)",
-        coverIcon:"🇩🇿", rating:4.1,
-        description:"المشهد الجزائري بعد الحراك: الانتخابات والعلاقة مع فرنسا.",
-        isBestseller:false, tags:["حراك","إصلاحات"]
-    },
-    {
-        id:17, titleAr:"تونس: ديمقراطية في خطر",
-        titleEn:"Tunisia: Democracy in Danger",
-        author:"مونيكا ماركس", authorEn:"Monica Marks",
-        publishDate:"2024-03-01", publisher:"Oxford University Press",
-        pages:296, language:"الإنجليزية", categories:["سياسة"],
-        region:"المغرب العربي", countries:["تونس"],
-        coverColor:"linear-gradient(135deg,#7a0a17,#ce1126,#e8334a)",
-        coverIcon:"🇹🇳", rating:4.2,
-        description:"الانقلاب على المسار الديمقراطي التونسي: تحليل أكاديمي معمق.",
-        isBestseller:false, tags:["ديمقراطية","قيس سعيد"]
-    },
-    {
-        id:18, titleAr:"المغرب: المملكة المتجددة",
-        titleEn:"Morocco: The Renewing Kingdom",
-        author:"شنتال مايل", authorEn:"Chantal Maille",
-        publishDate:"2024-07-01", publisher:"La Découverte - باريس",
-        pages:288, language:"الفرنسية", categories:["سياسة","مجتمع"],
-        region:"المغرب العربي", countries:["المغرب"],
-        coverColor:"linear-gradient(135deg,#5c0000,#c1272d,#e83535)",
-        coverIcon:"🇲🇦", rating:4.0,
-        description:"زلزال الحوز ومونديال 2030 والإصلاحات الاجتماعية.",
-        isBestseller:false, tags:["مونديال 2030","زلزال الحوز"]
-    },
-    {
-        id:19, titleAr:"ليبيا: عقد من الفوضى",
-        titleEn:"Libya: A Decade of Chaos",
-        author:"وولفرام لاخر", authorEn:"Wolfram Lacher",
-        publishDate:"2024-04-20", publisher:"Hurst Publishers",
-        pages:336, language:"الإنجليزية", categories:["سياسة","صراعات"],
-        region:"المغرب العربي", countries:["ليبيا"],
-        coverColor:"linear-gradient(135deg,#3d2200,#6b3d00,#996600)",
-        coverIcon:"🇱🇾", rating:4.2,
-        description:"الانقسام الليبي والتدخلات الخارجية والمليشيات.",
-        isBestseller:false, tags:["انقسام","حفتر"]
-    },
-    {
-        id:20, titleAr:"الأردن في مواجهة العواصف",
-        titleEn:"Jordan: Weathering the Storms",
-        author:"كورتيس ريان", authorEn:"Curtis Ryan",
-        publishDate:"2024-02-15", publisher:"Indiana University Press",
-        pages:284, language:"الإنجليزية", categories:["سياسة"],
-        region:"المشرق", countries:["الأردن"],
-        coverColor:"linear-gradient(135deg,#1a1a1a,#cc0000,#006600)",
-        coverIcon:"🇯🇴", rating:4.1,
-        description:"تداعيات حرب غزة والضغوط الاقتصادية على الأردن.",
-        isBestseller:false, tags:["صمود","لاجئون"]
-    },
-    {
-        id:21, titleAr:"الكويت وقطر: ديمقراطيات خليجية؟",
-        titleEn:"Kuwait and Qatar: Gulf Democracies?",
-        author:"مايكل هيرب", authorEn:"Michael Herb",
-        publishDate:"2024-05-01", publisher:"Cambridge University Press",
-        pages:308, language:"الإنجليزية", categories:["سياسة"],
-        region:"الخليج", countries:["الكويت","قطر"],
-        coverColor:"linear-gradient(135deg,#004d20,#007a33,#00a845)",
-        coverIcon:"🇰🇼", rating:4.0,
-        description:"هل يوجد نموذج ديمقراطي خليجي؟ مقارنة بين الكويت وقطر.",
-        isBestseller:false, tags:["برلمان","مشاركة"]
-    },
-    {
-        id:22, titleAr:"البحرين وعُمان: التحديات الصامتة",
-        titleEn:"Bahrain and Oman: Silent Challenges",
-        author:"مارك فالري", authorEn:"Marc Valeri",
-        publishDate:"2024-06-10", publisher:"Hurst Publishers",
-        pages:276, language:"الإنجليزية", categories:["سياسة","اقتصاد"],
-        region:"الخليج", countries:["البحرين","عمان"],
-        coverColor:"linear-gradient(135deg,#8b0000,#cc0000,#006233)",
-        coverIcon:"🇧🇭", rating:3.9,
-        description:"التنويع الاقتصادي والمشاركة السياسية في البحرين وعمان.",
-        isBestseller:false, tags:["تنويع اقتصادي"]
-    },
-    {
-        id:23, titleAr:"موريتانيا: جسر بين العرب وأفريقيا",
-        titleEn:"Mauritania: Bridge Between Arabs and Africa",
-        author:"عبد الودود ولد الشيخ", authorEn:"Abdel Wedoud Ould Cheikh",
-        publishDate:"2024-08-15", publisher:"L'Harmattan - باريس",
-        pages:268, language:"الفرنسية", categories:["مجتمع","سياسة"],
-        region:"المغرب العربي", countries:["موريتانيا"],
-        coverColor:"linear-gradient(135deg,#004d20,#006633,#009944)",
-        coverIcon:"🇲🇷", rating:3.8,
-        description:"الهوية الموريتانية بين العروبة والأفريقانية.",
-        isBestseller:false, tags:["هوية","ساحل"]
-    },
-    {
-        id:24, titleAr:"الصومال: من الانهيار إلى الأمل",
-        titleEn:"Somalia: From Collapse to Hope",
-        author:"ماري هاربر", authorEn:"Mary Harper",
-        publishDate:"2024-04-05", publisher:"Hurst Publishers",
-        pages:320, language:"الإنجليزية", categories:["سياسة","صراعات"],
-        region:"القرن الإفريقي", countries:["الصومال"],
-        coverColor:"linear-gradient(135deg,#1a4a7a,#4189dd,#62a8f0)",
-        coverIcon:"🇸🇴", rating:4.1,
-        description:"إعادة بناء الدولة الصومالية ومكافحة حركة الشباب.",
-        isBestseller:false, tags:["إعادة بناء","الشباب"]
-    },
-    {
-        id:25, titleAr:"جيبوتي وجزر القمر: البوابات المنسية",
-        titleEn:"Djibouti and Comoros: Forgotten Gates",
-        author:"جان-بيير فيليو", authorEn:"Jean-Pierre Filiu",
-        publishDate:"2024-09-01", publisher:"La Découverte",
-        pages:248, language:"الفرنسية", categories:["سياسة","ثقافة"],
-        region:"القرن الإفريقي", countries:["جيبوتي","جزر القمر"],
-        coverColor:"linear-gradient(135deg,#1a5276,#2980b9,#3498db)",
-        coverIcon:"🏝️", rating:3.7,
-        description:"أصغر الدول العربية وموقعها الاستراتيجي والتنافس الدولي.",
-        isBestseller:false, tags:["قواعد عسكرية"]
-    },
-    {
-        id:26, titleAr:"النظام العربي الجديد: ما بعد 7 أكتوبر",
-        titleEn:"The New Arab Order: After October 7",
-        author:"فواز جرجس", authorEn:"Fawaz Gerges",
-        publishDate:"2024-10-07", publisher:"Cambridge University Press",
-        pages:412, language:"الإنجليزية", categories:["سياسة","تاريخ"],
-        region:"شامل", countries:["العالم العربي"],
-        coverColor:"linear-gradient(135deg,#1a0a2e,#2e1a5e,#4a2a8e)",
-        coverIcon:"🌐", rating:4.6,
-        description:"كيف غيّر 7 أكتوبر النظام الإقليمي العربي والمحاور الجديدة.",
-        isBestseller:true, tags:["7 أكتوبر","تطبيع"]
-    },
-    {
-        id:27, titleAr:"الاستشراق في القرن 21",
-        titleEn:"Orientalism in the 21st Century",
-        author:"جوزيف مسعد", authorEn:"Joseph Massad",
-        publishDate:"2024-02-28", publisher:"Columbia University Press",
-        pages:400, language:"الإنجليزية", categories:["فكر","ثقافة"],
-        region:"شامل", countries:["العالم العربي"],
-        coverColor:"linear-gradient(135deg,#4a0000,#8b0000,#bb0000)",
-        coverIcon:"💡", rating:4.5,
-        description:"الأشكال الجديدة للاستشراق في الإعلام والسياسة والأكاديميا.",
-        isBestseller:false, tags:["إدوارد سعيد","إسلاموفوبيا"]
-    },
-    {
-        id:28, titleAr:"المرأة العربية 2024: نضال ومكتسبات",
-        titleEn:"Arab Women 2024: Struggles and Gains",
-        author:"ريم الكيلاني وآخرون", authorEn:"Reem Al-Kilani et al.",
-        publishDate:"2024-03-08", publisher:"I.B. Tauris / Bloomsbury",
-        pages:336, language:"الإنجليزية والعربية", categories:["مجتمع","حقوق"],
-        region:"شامل", countries:["السعودية","مصر","تونس","المغرب"],
-        coverColor:"linear-gradient(135deg,#400040,#800080,#b300b3)",
-        coverIcon:"👩‍💼", rating:4.3,
-        description:"مكتسبات المرأة العربية والتحديات في 10 دول. صدر يوم المرأة العالمي.",
-        isBestseller:false, tags:["نسوية","يوم المرأة"]
-    },
-    {
-        id:29, titleAr:"الاقتصاد العربي 2024: التحولات الكبرى",
-        titleEn:"Arab Economy 2024: Major Transformations",
-        author:"صندوق النقد العربي", authorEn:"Arab Monetary Fund",
-        publishDate:"2024-09-20", publisher:"صندوق النقد العربي - أبوظبي",
-        pages:460, language:"العربية والإنجليزية", categories:["اقتصاد"],
-        region:"شامل", countries:["22 دولة عربية"],
-        coverColor:"linear-gradient(135deg,#003200,#006400,#009600)",
-        coverIcon:"💰", rating:4.4,
-        description:"تقرير اقتصادي شامل: النمو والتضخم والبطالة والطاقة المتجددة.",
-        isBestseller:false, tags:["تقرير سنوي","اقتصاد كلي"]
-    },
-    {
-        id:30, titleAr:"الشباب العربي: جيل التغيير",
-        titleEn:"Arab Youth: Generation of Change",
-        author:"مروان المعشر", authorEn:"Marwan Muasher",
-        publishDate:"2024-08-20", publisher:"Carnegie Endowment",
-        pages:292, language:"الإنجليزية", categories:["مجتمع","سياسة"],
-        region:"شامل", countries:["العالم العربي"],
-        coverColor:"linear-gradient(135deg,#0a3a5a,#1a6a9a,#2a9ada)",
-        coverIcon:"👨‍💻", rating:4.2,
-        description:"200 مليون شاب عربي: التطلعات والهجرة والريادة الرقمية.",
-        isBestseller:false, tags:["شباب","ريادة"]
-    },
-    {
-        id:31, titleAr:"الذكاء الاصطناعي في العالم العربي",
-        titleEn:"AI in the Arab World",
-        author:"أيمن الصياد وآخرون", authorEn:"Ayman Al-Sayyad et al.",
-        publishDate:"2024-10-01", publisher:"مؤسسة الفكر العربي - بيروت",
-        pages:380, language:"العربية", categories:["اقتصاد","ثقافة"],
-        region:"شامل", countries:["الإمارات","السعودية","مصر","تونس"],
-        coverColor:"linear-gradient(135deg,#0a0a3a,#1a1a6a,#2a2a9a)",
-        coverIcon:"🤖", rating:4.3,
-        description:"أول كتاب عربي شامل عن الذكاء الاصطناعي في 8 دول.",
-        isBestseller:false, tags:["ذكاء اصطناعي","تحول رقمي"]
-    },
-    {
-        id:32, titleAr:"العربية في العصر الرقمي",
-        titleEn:"Arabic in the Digital Age",
-        author:"نبيل علي", authorEn:"Nabil Ali",
-        publishDate:"2024-07-20", publisher:"المنظمة العربية للتربية والثقافة",
-        pages:310, language:"العربية", categories:["ثقافة"],
-        region:"شامل", countries:["العالم العربي"],
-        coverColor:"linear-gradient(135deg,#0a2a4a,#1a4a7a,#2a6aaa)",
-        coverIcon:"📱", rating:4.0,
-        description:"اللغة العربية في الفضاء الرقمي والذكاء الاصطناعي والترجمة الآلية.",
-        isBestseller:false, tags:["لغة عربية","رقمنة"]
-    },
-    {
-        id:33, titleAr:"الطاقة المتجددة في الخليج",
-        titleEn:"Renewable Energy in the Gulf",
-        author:"ماري لومي", authorEn:"Mari Luomi",
-        publishDate:"2024-06-15", publisher:"Oxford University Press",
-        pages:288, language:"الإنجليزية", categories:["اقتصاد"],
-        region:"الخليج", countries:["السعودية","الإمارات","قطر","الكويت"],
-        coverColor:"linear-gradient(135deg,#004d00,#008800,#00cc00)",
-        coverIcon:"☀️", rating:4.1,
-        description:"التحول الطاقوي: نيوم والطاقة الشمسية والهيدروجين الأخضر.",
-        isBestseller:false, tags:["نيوم","هيدروجين أخضر"]
-    },
-    {
-        id:34, titleAr:"فلسطين: أرض الوعد والصراع",
-        titleEn:"Palestine: Land of Promise and Conflict",
-        author:"عدنان أبو عامر", authorEn:"Adnan Abu Amer",
-        publishDate:"2024-04-12", publisher:"دار الشروق - القاهرة",
-        pages:420, language:"العربية", categories:["تاريخ","سياسة"],
-        region:"المشرق", countries:["فلسطين"],
-        coverColor:"linear-gradient(135deg,#0b3d0b,#1a5c1a,#2d8a2d)",
-        coverIcon:"🫒", rating:4.5,
-        description:"رؤية عربية شاملة من النكبة حتى حرب غزة الأخيرة.",
-        isBestseller:false, tags:["رؤية فلسطينية"]
-    },
-    {
-        id:35, titleAr:"الأكاديميا العربية: أزمة وتحولات",
-        titleEn:"Arab Academia: Crisis and Transformation",
-        author:"ساري حنفي", authorEn:"Sari Hanafi",
-        publishDate:"2024-09-15", publisher:"المركز العربي - الدوحة",
-        pages:356, language:"العربية والإنجليزية", categories:["ثقافة","مجتمع"],
-        region:"شامل", countries:["لبنان","مصر","تونس","الأردن"],
-        coverColor:"linear-gradient(135deg,#2a1a0a,#5a3a1a,#8a5a2a)",
-        coverIcon:"🎓", rating:4.2,
-        description:"الجامعات العربية والبحث العلمي وهجرة الأدمغة.",
-        isBestseller:false, tags:["جامعات","بحث علمي"]
-    }
+// ═══════════════════════════════════════════════════
+// مرصد مراجعات الكتب — أفريقيا والعالم العربي والشرق الأوسط
+// تبقى المراجعة سنتين — تحديث يومي
+// ═══════════════════════════════════════════════════
+
+let ALL_ITEMS = [];
+let currentLang = 'all';
+const CACHE_KEY  = 'book_reviews_africa_arab_v2';
+const CACHE_MS   = 24*60*60*1000; // 24 ساعة
+const TWO_YEARS  = 2*365*24*60*60*1000; // سنتان
+
+// ─── قائمة المصادر والدوريات ───
+const SOURCES_LIST = [
+"Crossref API","OpenAlex API","Semantic Scholar API","Google Books API","Open Library API","DOAB",
+// دوريات أفريقية
+"African Affairs (Oxford)","Journal of Modern African Studies","African Studies Review",
+"Review of African Political Economy","Journal of African History","Africa (Cambridge)",
+"Africa Today","African Studies Quarterly","Journal of African Cultural Studies",
+"African Journal of Political Science","South African Journal of International Affairs",
+"Journal of Contemporary African Studies","Journal of Eastern African Studies",
+"Journal of Southern African Studies","Journal of West African History",
+"Canadian Journal of African Studies","African Identities","African Security",
+"Journal of North African Studies","Cahiers d'Études Africaines",
+"Politique Africaine","Afrique Contemporaine","Africa Development (CODESRIA)",
+"Africa Spectrum","African Development Review","African Geographical Review",
+"Journal of African Economies","Africa Conflict and Peacebuilding Review",
+"African Security Review","Democratization (Africa)","Journal of African Law",
+"Journal of African Elections","African Studies (Routledge)","Africa Research Bulletin",
+// دوريات عربية وشرق أوسطية
+"Middle East Journal","International Journal of Middle East Studies",
+"Middle Eastern Studies","British Journal of Middle Eastern Studies",
+"Journal of Arabian Studies","Middle East Policy","Middle East Report (MERIP)",
+"Middle East Critique","Review of Middle East Studies","Arab Studies Quarterly",
+"Arab Studies Journal","Contemporary Arab Affairs","Journal of Arabic Literature",
+"Bulletin of the School of Oriental and African Studies (BSOAS)",
+"Die Welt des Islams","Islamic Law and Society","Journal of Islamic Studies",
+"Muslim World","Studia Islamica","Arabica","Al-Qantara",
+"Revue des mondes musulmans et de la Méditerranée (REMMM)",
+"Maghreb–Machrek","Confluences Méditerranée","L'Année du Maghreb",
+"Insaniyat / إنسانيات","Hesperis-Tamuda",
+"المستقبل العربي","سياسات عربية","عمران","تبيّن","إضافات",
+"الاجتهاد والتجديد","المجلة العربية للعلوم السياسية",
+// عامة
+"Third World Quarterly","Comparative Politics","Democratization",
+"Development and Change","World Development","Journal of Development Studies",
+"Conflict, Security & Development","Forced Migration Review",
+"Journal of Refugee Studies","International Migration Review",
+"Journal of Ethnic and Migration Studies","Gender & Development",
+"Feminist Africa","Journal of the Middle East and Africa",
+"Asian and African Studies","Northeast African Studies",
+"Revue Tiers Monde","Autrepart","Les Cahiers d'Outre-Mer"
 ];
 
-const ARAB_COUNTRIES = [
-    {f:"🇵🇸",n:"فلسطين"},{f:"🇸🇦",n:"السعودية"},{f:"🇦🇪",n:"الإمارات"},
-    {f:"🇪🇬",n:"مصر"},{f:"🇮🇶",n:"العراق"},{f:"🇸🇾",n:"سوريا"},
-    {f:"🇱🇧",n:"لبنان"},{f:"🇯🇴",n:"الأردن"},{f:"🇾🇪",n:"اليمن"},
-    {f:"🇸🇩",n:"السودان"},{f:"🇱🇾",n:"ليبيا"},{f:"🇹🇳",n:"تونس"},
-    {f:"🇩🇿",n:"الجزائر"},{f:"🇲🇦",n:"المغرب"},{f:"🇲🇷",n:"موريتانيا"},
-    {f:"🇰🇼",n:"الكويت"},{f:"🇧🇭",n:"البحرين"},{f:"🇶🇦",n:"قطر"},
-    {f:"🇴🇲",n:"عمان"},{f:"🇸🇴",n:"الصومال"},{f:"🇩🇯",n:"جيبوتي"},
-    {f:"🇰🇲",n:"جزر القمر"}
-];
+// ─── استعلامات بحث مراجعات الكتب ───
+const REVIEW_QUERIES = {
+en:[
+"book review africa politics","book review african development","book review african history",
+"book review sahel security","book review horn africa","book review west africa nigeria",
+"book review east africa kenya","book review south africa","book review north africa maghreb",
+"book review central africa congo","book review sudan darfur","book review ethiopia eritrea",
+"book review somalia somaliland","book review african migration","book review african feminism gender",
+"book review african literature","book review african philosophy","book review decolonization africa",
+"book review postcolonial africa","book review african economy","book review african conflict peace",
+"book review african democracy elections","book review african islam","book review pan-africanism",
+"book review african union","book review china africa","book review france africa",
+"book review middle east politics","book review arab world affairs","book review arab spring",
+"book review egypt politics","book review morocco western sahara","book review tunisia democracy",
+"book review algeria politics","book review libya conflict","book review syria war",
+"book review iraq politics","book review lebanon crisis","book review yemen crisis",
+"book review jordan refugees","book review gulf states governance","book review saudi arabia",
+"book review qatar diplomacy","book review uae foreign policy","book review palestine israel",
+"book review arab literature","book review islamic studies","book review arab history modern",
+"book review middle east security","book review terrorism middle east",
+"book review arab migration refugees","book review women middle east",
+"book review oil politics gulf","book review water security middle east",
+"book review climate change africa","review african studies","critical review africa book",
+"book review african cinema","book review african art","book review african music",
+"book review african urbanization","book review african youth","book review african health",
+"book review african education","book review african languages","book review swahili",
+"book review african diaspora","book review slavery africa","book review colonialism africa"
+],
+fr:[
+"compte rendu livre afrique politique","critique livre afrique développement",
+"recension livre maghreb","compte rendu livre sahel sécurité",
+"critique livre afrique subsaharienne","recension livre afrique ouest",
+"compte rendu livre afrique est","critique livre afrique centrale",
+"recension livre corne afrique","compte rendu livre soudan",
+"critique livre maroc sahara","recension livre algérie politique",
+"compte rendu livre tunisie","critique livre libye","recension livre égypte",
+"compte rendu livre monde arabe","critique livre moyen orient",
+"recension livre printemps arabe","compte rendu livre migration africaine",
+"critique livre littérature africaine","recension livre islam afrique",
+"compte rendu livre colonisation afrique","critique livre décolonisation",
+"recension livre francophonie afrique","compte rendu livre femmes afrique",
+"critique livre jeunesse afrique","recension livre urbanisation afrique",
+"compte rendu livre économie africaine","critique livre conflit africain",
+"recension livre démocratie afrique","compte rendu livre syrie guerre",
+"critique livre liban crise","recension livre golfe monarchies",
+"compte rendu livre histoire arabe","critique livre littérature arabe"
+],
+ar:[
+"مراجعة كتاب أفريقيا السياسة","عرض كتاب التنمية الأفريقية",
+"مراجعة كتاب الساحل الأمن","عرض كتاب القرن الأفريقي",
+"مراجعة كتاب المغرب العربي","عرض كتاب شمال أفريقيا",
+"مراجعة كتاب السودان الصراع","عرض كتاب مصر السياسة",
+"مراجعة كتاب المغرب الصحراء","عرض كتاب تونس الديمقراطية",
+"مراجعة كتاب الجزائر","عرض كتاب ليبيا","مراجعة كتاب الشرق الأوسط",
+"عرض كتاب العالم العربي","مراجعة كتاب الربيع العربي",
+"عرض كتاب سوريا الحرب","مراجعة كتاب لبنان الأزمة",
+"عرض كتاب اليمن","مراجعة كتاب العراق","عرض كتاب فلسطين",
+"مراجعة كتاب الخليج العربي","عرض كتاب السعودية",
+"مراجعة كتاب الإمارات قطر","عرض كتاب الهجرة الأفريقية",
+"مراجعة كتاب الأدب الأفريقي","عرض كتاب الأدب العربي",
+"مراجعة كتاب الإسلام السياسي","عرض كتاب التاريخ الأفريقي",
+"مراجعة كتاب التاريخ العربي","عرض كتاب المرأة أفريقيا",
+"مراجعة كتاب المرأة العالم العربي","عرض كتاب الاستعمار أفريقيا",
+"مراجعة كتاب الصراعات الأفريقية","عرض كتاب الديمقراطية أفريقيا",
+"مراجعة كتاب الشباب الأفريقي","عرض كتاب الاقتصاد الأفريقي",
+"مراجعة كتاب الصين أفريقيا","عرض كتاب فرنسا أفريقيا"
+]
+};
 
-// ========== الحالة ==========
-let catFilter = 'all';
-let regFilter = 'all';
-let query = '';
-let sort = 'newest';
-let favs = JSON.parse(localStorage.getItem('arab_books_favs') || '[]');
-let autoUpdateEnabled = true;
-let updateTimer = null;
-let countdownInterval = null;
+// ═══════════════════════════════════════════════════
+// أدوات مساعدة
+// ═══════════════════════════════════════════════════
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 
-// ========== الدوال ==========
-
-function now() { return new Date(); }
-
-const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو',
-                   'يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-const DAYS_AR = ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-
-function fmtDate(d) {
-    return `${DAYS_AR[d.getDay()]} ${d.getDate()} ${MONTHS_AR[d.getMonth()]} ${d.getFullYear()}`;
+function isWithinTwoYears(dateStr){
+ if(!dateStr) return false;
+ return (Date.now() - new Date(dateStr).getTime()) <= TWO_YEARS;
 }
 
-function fmtTime(d) {
-    let h = d.getHours().toString().padStart(2,'0');
-    let m = d.getMinutes().toString().padStart(2,'0');
-    let s = d.getSeconds().toString().padStart(2,'0');
-    return `${h}:${m}:${s}`;
+function detectLang(text){
+ if(!text) return 'en';
+ if(/[\u0600-\u06FF]/.test(text)) return 'ar';
+ if(/[àâéèêëïîôùûüÿçœæ]/i.test(text)) return 'fr';
+ if(/\b(le|la|les|du|des|une?|et|en|dans|politique|afrique|compte|rendu|recension|critique)\b/i.test(text)) return 'fr';
+ return 'en';
 }
 
-function daysSince(dateStr) {
-    return Math.floor((now() - new Date(dateStr)) / 864e5);
+function detectTopics(title,desc){
+ const t=((title||'')+' '+(desc||'')).toLowerCase(), out=[];
+ const map={
+ 'أفريق|africa|afrique|african':'Africa',
+ 'شمال أفريق|المغرب العربي|north africa|maghreb|maghrébin':'North Africa',
+ 'ساحل|sahel|mali|niger|burkina|tchad':'Sahel',
+ 'القرن الأفريقي|horn.africa|corne.afrique|إثيوب|ethiopia|éthiop|صومال|somalia|somalie|إريتري|eritrea|جيبوت|djibouti':'Horn of Africa',
+ 'أفريقيا الغربية|west.africa|afrique.ouest|نيجيري|nigeria|غانا|ghana|سنغال|senegal|sénégal':'West Africa',
+ 'أفريقيا الشرقية|east.africa|afrique.est|كيني|kenya|تنزاني|tanzania|أوغند|uganda':'East Africa',
+ 'أفريقيا الوسطى|central.africa|afrique.central|كونغو|congo|كامرون|cameroon|cameroun':'Central Africa',
+ 'أفريقيا الجنوبية|جنوب أفريقيا|south.africa|afrique.sud|afrique.austral':'Southern Africa',
+ 'عرب|arab|arabe':'Arab World',
+ 'الشرق الأوسط|middle.east|moyen.orient':'Middle East',
+ 'خليج|gulf|golfe|قطر|qatar|إمارات|emirates|سعود|saudi|بحرين|bahrain|كويت|kuwait|عمان|oman':'Gulf',
+ 'سودان|sudan|soudan|دارفور|darfur':'Sudan',
+ 'أمن|صراع|terror|conflict|conflit|securi|guerre|war|peace|سلام|حرب':'Security',
+ 'هجر|migrat|diaspora|لاجئ|refugee|réfugié':'Migration',
+ 'تنمي|develop|économi|econom|اقتصاد|poverty|فقر':'Development',
+ 'سياس|politi|democra|ديمقراط|govern|حكم|élection|انتخاب':'Politics',
+ 'نساء|women|gender|femme|نوع اجتماع|féminism|نسوي':'Gender',
+ 'إسلام|islam|muslim|مسلم':'Islam',
+ 'أدب|literature|littérature|رواية|novel|roman|شعر|poetry|poésie':'Literature',
+ 'تاريخ|history|histoire|colonial|استعمار':'History',
+ 'مصر|egypt|égypt':'Egypt','ليبي|libya|libye':'Libya',
+ 'مغرب|morocco|maroc':'Morocco','جزائر|algeria|algérie':'Algeria',
+ 'تونس|tunisia|tunisie':'Tunisia','سوري|syria|syrie':'Syria',
+ 'لبنان|lebanon|liban':'Lebanon','عراق|iraq|irak':'Iraq',
+ 'يمن|yemen|yémen':'Yemen','فلسطين|palestine':'Palestine',
+ };
+ for(const[p,topic] of Object.entries(map)){if(new RegExp(p,'i').test(t)) out.push(topic)}
+ return out.length ? out.slice(0,5) : ['General'];
 }
 
-function isActive(dateStr) {
-    let d = daysSince(dateStr);
-    return d >= 0 && d <= 365;
+function detectReviewType(title,desc){
+ const t=((title||'')+' '+(desc||'')).toLowerCase();
+ if(/book\s*review|مراجعة كتاب|عرض كتاب|compte\s*rendu|recension|critical\s*review|نقد كتاب/i.test(t)) return 'review';
+ if(/review\s*essay|مقال مراجعة|essai\s*critique/i.test(t)) return 'review';
+ if(/chapter|فصل|chapitre/i.test(t)) return 'chapter';
+ if(/thesis|dissertation|رسالة|أطروحة|thèse/i.test(t)) return 'thesis';
+ return 'article';
 }
 
-function activeBooks() {
-    return ALL_BOOKS.filter(b => isActive(b.publishDate));
+function escHtml(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+
+// ═══════════════════════════════════════════════════
+// إزالة التكرار
+// ═══════════════════════════════════════════════════
+function norm(s){return(s||'').toLowerCase().replace(/[^\w\s\u0600-\u06FF]/g,' ').replace(/\s+/g,' ').trim().substring(0,100)}
+function dedup(items){
+ const seen=new Set(), out=[];
+ for(const it of items){
+ const key=norm(it.title)+'::'+(it.authors||[])[0];
+ if(seen.has(key)) continue;
+ seen.add(key);
+ out.push(it);
+ }
+ console.log(`🔄 إزالة التكرار: ${items.length} → ${out.length}`);
+ return out;
 }
 
-function daysLabel(d) {
-    if (d === 0) return 'اليوم';
-    if (d === 1) return 'أمس';
-    if (d <= 7) return `منذ ${d} أيام`;
-    if (d <= 30) return `منذ ${Math.floor(d/7)} أسابيع`;
-    if (d <= 60) return `منذ شهر`;
-    if (d <= 365) return `منذ ${Math.floor(d/30)} أشهر`;
-    return 'أكثر من سنة';
+// ═══════════════════════════════════════════════════
+// جلب من Crossref  (أفضل مصدر لمراجعات الكتب)
+// ═══════════════════════════════════════════════════
+async function fetchCrossref(query){
+ const items=[];
+ try{
+ const twoYearsAgo = new Date(Date.now()-TWO_YEARS);
+ const fromDate = `${twoYearsAgo.getFullYear()}-${String(twoYearsAgo.getMonth()+1).padStart(2,'0')}-01`;
+
+ const params=new URLSearchParams({
+  'query.bibliographic': query,
+  rows:'50',
+  sort:'published',
+  order:'desc',
+  'filter': `from-pub-date:${fromDate}`,
+  select:'DOI,title,author,published-print,published-online,container-title,type,abstract,URL,subject,page,volume,issue,publisher'
+ });
+ const r=await fetch(`https://api.crossref.org/works?${params}`,{
+  headers:{'User-Agent':'BookReviewObservatory/1.0 (mailto:research@observatory.org)'}
+ });
+ if(!r.ok) return items;
+ const data=await r.json();
+
+ for(const w of (data.message?.items||[])){
+  const title=(w.title||[])[0]||'';
+  if(!title || title.length<15) continue;
+
+  const pubParts = w['published-print']?.['date-parts']?.[0] || w['published-online']?.['date-parts']?.[0] || [];
+  const pubDate = pubParts.length>=1 ?
+  `${pubParts[0]}-${String(pubParts[1]||1).padStart(2,'0')}-${String(pubParts[2]||1).padStart(2,'0')}` : '';
+  if(!isWithinTwoYears(pubDate)) continue;
+
+  const authors=(w.author||[]).map(a=>[a.given,a.family].filter(Boolean).join(' ')).slice(0,5);
+  const journal=(w['container-title']||[])[0]||'';
+  const lang=detectLang(title+' '+journal);
+  const type=w.type==='journal-article'&&/review/i.test(title)?'review':
+        w.type==='book-chapter'?'chapter':
+        w.type==='dissertation'?'thesis':
+        detectReviewType(title,w.abstract||'');
+
+  items.push({
+  id:'cr_'+w.DOI,
+  title,
+  authors,
+  journal,
+  publisher: w.publisher||'',
+  publication_date: pubDate,
+  doi: w.DOI||'',
+  url: w.URL || (w.DOI?`https://doi.org/${w.DOI}`:''),
+  description:(w.abstract||'').replace(/<[^>]*>/g,'').substring(0,500),
+  language: lang,
+  topics: detectTopics(title,(w.abstract||'')+' '+(w.subject||[]).join(' ')),
+  source:'Crossref',
+  type,
+  volume: w.volume||'',
+  issue: w.issue||'',
+  pages: w.page||'',
+  });
+ }
+ }catch(e){console.warn('Crossref err:',query,e)}
+ return items;
 }
 
-function daysLeft(dateStr) {
-    return 365 - daysSince(dateStr);
+// ═══════════════════════════════════════════════════
+// جلب من OpenAlex
+// ═══════════════════════════════════════════════════
+async function fetchOpenAlex(query){
+ const items=[];
+ try{
+ const twoYearsAgo = new Date(Date.now()-TWO_YEARS);
+ const fromDate = `${twoYearsAgo.getFullYear()}-${String(twoYearsAgo.getMonth()+1).padStart(2,'0')}-01`;
+
+ const params=new URLSearchParams({
+  search: query,
+  per_page:'50',
+  sort:'publication_date:desc',
+  filter:`from_publication_date:${fromDate}`
+ });
+ const r=await fetch(`https://api.openalex.org/works?${params}`,{
+  headers:{'User-Agent':'mailto:research@observatory.org'}
+ });
+ if(!r.ok) return items;
+ const data=await r.json();
+
+ for(const w of (data.results||[])){
+  const title=w.title||'';
+  if(!title||title.length<15) continue;
+
+  const pubDate=w.publication_date||'';
+  if(!isWithinTwoYears(pubDate)) continue;
+
+  const authors=(w.authorships||[]).map(a=>a.author?.display_name||'').filter(Boolean).slice(0,5);
+  const journal=(w.primary_location?.source?.display_name)||'';
+  const lang=detectLang(title+' '+journal);
+  const type=detectReviewType(title,'');
+
+  items.push({
+  id:'oa_'+(w.id||'').replace('https://openalex.org/',''),
+  title,
+  authors,
+  journal,
+  publisher:(w.primary_location?.source?.host_organization_name)||'',
+  publication_date:pubDate,
+  doi:(w.doi||'').replace('https://doi.org/',''),
+  url: w.primary_location?.landing_page_url || w.doi || '',
+  description:'',
+  language:lang,
+  topics:detectTopics(title,(w.concepts||[]).map(c=>c.display_name).join(' ')),
+  source:'OpenAlex',
+  type,
+  volume:'',issue:'',pages:'',
+  cited_by: w.cited_by_count||0,
+  });
+ }
+ }catch(e){console.warn('OpenAlex err:',query,e)}
+ return items;
 }
 
-function stars(r) {
-    return '★'.repeat(Math.floor(r)) + (r%1>=0.5?'½':'') + '☆'.repeat(5-Math.floor(r)-(r%1>=0.5?1:0));
+// ═══════════════════════════════════════════════════
+// جلب من Semantic Scholar
+// ═══════════════════════════════════════════════════
+async function fetchSemanticScholar(query){
+ const items=[];
+ try{
+ const currentYear = new Date().getFullYear();
+ const twoYearsAgoYear = currentYear - 2;
+
+ const params=new URLSearchParams({
+  query,
+  limit:'50',
+  fields:'title,authors,year,externalIds,url,abstract,venue,publicationDate,citationCount',
+  year:`${twoYearsAgoYear}-${currentYear}`
+ });
+ const r=await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?${params}`);
+ if(!r.ok) return items;
+ const data=await r.json();
+
+ for(const p of (data.data||[])){
+  const title=p.title||'';
+  if(!title||title.length<15) continue;
+
+  const pubDate=p.publicationDate || (p.year?`${p.year}-01-01`:'');
+  if(!isWithinTwoYears(pubDate)) continue;
+
+  const authors=(p.authors||[]).map(a=>a.name).slice(0,5);
+  const lang=detectLang(title+' '+(p.venue||''));
+  const type=detectReviewType(title,p.abstract||'');
+
+  items.push({
+  id:'ss_'+p.paperId,
+  title,
+  authors,
+  journal:p.venue||'',
+  publisher:'',
+  publication_date:pubDate,
+  doi:p.externalIds?.DOI||'',
+  url:p.url||'',
+  description:(p.abstract||'').substring(0,500),
+  language:lang,
+  topics:detectTopics(title,p.abstract||''),
+  source:'Semantic Scholar',
+  type,
+  volume:'',issue:'',pages:'',
+  cited_by:p.citationCount||0,
+  });
+ }
+ }catch(e){console.warn('S2 err:',query,e)}
+ return items;
 }
 
-function filtered() {
-    let books = activeBooks();
-    if (catFilter !== 'all') books = books.filter(b => b.categories.some(c => c.includes(catFilter)));
-    if (regFilter !== 'all') books = books.filter(b => b.region === regFilter);
-    if (query) {
-        let q = query.toLowerCase();
-        books = books.filter(b =>
-            b.titleAr.toLowerCase().includes(q) || b.titleEn.toLowerCase().includes(q) ||
-            b.author.toLowerCase().includes(q) || b.authorEn.toLowerCase().includes(q) ||
-            b.publisher.toLowerCase().includes(q) || b.description.toLowerCase().includes(q) ||
-            b.countries.some(c => c.toLowerCase().includes(q)) ||
-            b.tags.some(t => t.toLowerCase().includes(q))
-        );
-    }
-    switch(sort) {
-        case 'newest': books.sort((a,b) => new Date(b.publishDate)-new Date(a.publishDate)); break;
-        case 'oldest': books.sort((a,b) => new Date(a.publishDate)-new Date(b.publishDate)); break;
-        case 'rating': books.sort((a,b) => b.rating-a.rating); break;
-        case 'pages-d': books.sort((a,b) => b.pages-a.pages); break;
-        case 'pages-a': books.sort((a,b) => a.pages-b.pages); break;
-        case 'expiring': books.sort((a,b) => daysLeft(a.publishDate)-daysLeft(b.publishDate)); break;
-        case 'alpha': books.sort((a,b) => a.titleAr.localeCompare(b.titleAr,'ar')); break;
-    }
-    return books;
+// ═══════════════════════════════════════════════════
+// جلب من Google Books (مراجعات مضمّنة في وصف الكتب)
+// ═══════════════════════════════════════════════════
+async function fetchGoogleBooksReviews(query){
+ const items=[];
+ try{
+ const params=new URLSearchParams({q:query,printType:'books',orderBy:'newest',maxResults:'20'});
+ const r=await fetch(`https://www.googleapis.com/books/v1/volumes?${params}`);
+ if(!r.ok) return items;
+ const data=await r.json();
+
+ for(const item of (data.items||[])){
+  const v=item.volumeInfo||{};
+  const pubDate=v.publishedDate||'';
+  if(!isWithinTwoYears(pubDate)) continue;
+
+  const title=v.title+(v.subtitle?': '+v.subtitle:'');
+  if(!title||title.length<10) continue;
+
+  const lang=v.language==='ar'?'ar':v.language==='fr'?'fr':detectLang(title);
+
+  items.push({
+  id:'gb_'+item.id,
+  title:'مراجعة: '+title,
+  authors:v.authors||[],
+  journal:'Google Books',
+  publisher:v.publisher||'',
+  publication_date:pubDate,
+  doi:'',
+  url:v.infoLink||v.previewLink||'',
+  description:(v.description||'').substring(0,400),
+  language:lang,
+  topics:detectTopics(title,v.description||''),
+  source:'Google Books',
+  type:'review',
+  volume:'',issue:'',pages:v.pageCount?v.pageCount+' ص':'',
+  cover:(v.imageLinks?.thumbnail||'').replace('http:','https:'),
+  });
+ }
+ }catch(e){console.warn('GB err:',query,e)}
+ return items;
 }
 
-// ========== نظام التحديث ==========
+// ═══════════════════════════════════════════════════
+// المحرك الرئيسي
+// ═══════════════════════════════════════════════════
+async function fetchAllReviews(){
+ document.getElementById('progressBar').style.display='block';
+ document.getElementById('refreshBtn').disabled=true;
+ document.getElementById('reviewsGrid').innerHTML=
+ '<div class="loader"><div class="spinner"></div><p>جارٍ جلب مراجعات الكتب من المصادر الأكاديمية...</p></div>';
 
-function getNextMidnight() {
-    let d = new Date();
-    d.setDate(d.getDate() + 1);
-    d.setHours(0, 0, 0, 0);
-    return d;
+ const all=[];
+
+ // تجميع كل الاستعلامات مع مصادرها
+ const tasks=[];
+
+ // Crossref — أفضل مصدر
+ for(const q of REVIEW_QUERIES.en) tasks.push({q,api:'crossref'});
+ for(const q of REVIEW_QUERIES.fr) tasks.push({q,api:'crossref'});
+ for(const q of REVIEW_QUERIES.ar) tasks.push({q,api:'crossref'});
+
+ // OpenAlex
+ for(const q of REVIEW_QUERIES.en.slice(0,30)) tasks.push({q,api:'openalex'});
+ for(const q of REVIEW_QUERIES.fr.slice(0,15)) tasks.push({q,api:'openalex'});
+ for(const q of REVIEW_QUERIES.ar.slice(0,15)) tasks.push({q,api:'openalex'});
+
+ // Semantic Scholar
+ for(const q of REVIEW_QUERIES.en.slice(0,20)) tasks.push({q,api:'semantic'});
+
+ // Google Books
+ for(const q of REVIEW_QUERIES.en.slice(0,10)) tasks.push({q,api:'googlebooks'});
+ for(const q of REVIEW_QUERIES.fr.slice(0,8)) tasks.push({q,api:'googlebooks'});
+ for(const q of REVIEW_QUERIES.ar.slice(0,8)) tasks.push({q,api:'googlebooks'});
+
+ const total=tasks.length;
+ let step=0;
+
+ for(const{q,api} of tasks){
+ step++;
+ updateProgress(step,total,`${api}: ${q.substring(0,30)}...`);
+
+ let results=[];
+ try{
+  if(api==='crossref')     results=await fetchCrossref(q);
+  else if(api==='openalex')  results=await fetchOpenAlex(q);
+  else if(api==='semantic')  results=await fetchSemanticScholar(q);
+  else if(api==='googlebooks') results=await fetchGoogleBooksReviews(q);
+ }catch(e){console.warn(e)}
+
+ all.push(...results);
+
+ // تأخير بين الطلبات
+ const delay = api==='semantic'?600 : api==='crossref'?350 : 250;
+ await sleep(delay);
+ }
+
+ updateProgress(total,total,'إزالة التكرار وتنقيح النتائج...');
+
+ ALL_ITEMS = dedup(all).filter(it=>isWithinTwoYears(it.publication_date));
+ ALL_ITEMS.sort((a,b)=>new Date(b.publication_date)-new Date(a.publication_date));
+
+ console.log(`📊 إجمالي المراجعات: ${ALL_ITEMS.length}`);
+
+ try{localStorage.setItem(CACHE_KEY,JSON.stringify({items:ALL_ITEMS,timestamp:Date.now()}))}catch(e){}
+
+ document.getElementById('progressBar').style.display='none';
+ document.getElementById('refreshBtn').disabled=false;
+
+ updateStats();
+ filterItems();
+ updateLastTime();
 }
 
-function startCountdown() {
-    if (countdownInterval) clearInterval(countdownInterval);
-
-    countdownInterval = setInterval(() => {
-        let next = getNextMidnight();
-        let diff = next - now();
-
-        if (diff <= 0) {
-            performAutoUpdate();
-            return;
-        }
-
-        let h = Math.floor(diff / 3600000);
-        let m = Math.floor((diff % 3600000) / 60000);
-        let s = Math.floor((diff % 60000) / 1000);
-
-        document.getElementById('countdown').textContent =
-            `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
+function updateProgress(c,t,s){
+ const p=Math.round((c/t)*100);
+ document.getElementById('progressFill').style.width=p+'%';
+ document.getElementById('progressText').textContent=`📥 ${p}% — ${s}`;
 }
 
-function performAutoUpdate() {
-    if (!autoUpdateEnabled) return;
-    showUpdateAnimation();
-    setTimeout(() => {
-        renderAll();
-        saveUpdateTime();
-        showToast('✅ تم التحديث التلقائي اليومي بنجاح', 'success');
-        startCountdown();
-    }, 2500);
+// ═══════════════════════════════════════════════════
+// الفلترة والعرض
+// ═══════════════════════════════════════════════════
+function setLang(lang,btn){
+ currentLang=lang;
+ document.querySelectorAll('.filter-btn').forEach(b=>b.className='filter-btn');
+ if(lang==='all') btn.classList.add('active');
+ else if(lang==='ar') btn.classList.add('active-ar');
+ else if(lang==='fr') btn.classList.add('active-fr');
+ else if(lang==='en') btn.classList.add('active-en');
+ filterItems();
 }
 
-function manualRefresh() {
-    let btn = document.getElementById('refreshBtn');
-    if (btn.classList.contains('spinning')) return;
+function filterItems(){
+ const search=document.getElementById('searchInput').value.toLowerCase();
+ const topic=document.getElementById('topicSelect').value;
+ const sort=document.getElementById('sortSelect').value;
 
-    btn.classList.add('spinning');
-    showUpdateAnimation();
+ let filtered=ALL_ITEMS.filter(it=>{
+ if(currentLang!=='all'&&it.language!==currentLang) return false;
+ if(topic&&!it.topics.some(t=>t.toLowerCase().includes(topic.toLowerCase()))) return false;
+ if(search){
+  const hay=(it.title+' '+(it.authors||[]).join(' ')+' '+it.journal+' '+it.publisher+' '+it.description).toLowerCase();
+  if(!hay.includes(search)) return false;
+ }
+ return true;
+ });
 
-    let indicator = document.getElementById('liveIndicator');
-    let liveText = document.getElementById('liveText');
-    indicator.className = 'live-indicator updating';
-    liveText.textContent = 'جارٍ التحديث...';
+ if(sort==='title') filtered.sort((a,b)=>a.title.localeCompare(b.title,'ar'));
+ else filtered.sort((a,b)=>new Date(b.publication_date)-new Date(a.publication_date));
 
-    setTimeout(() => {
-        renderAll();
-        saveUpdateTime();
-
-        btn.classList.remove('spinning');
-        indicator.className = 'live-indicator online';
-        liveText.textContent = 'مُحدَّث';
-
-        let removed = ALL_BOOKS.length - activeBooks().length;
-        let msg = `✅ تم التحديث بنجاح`;
-        if (removed > 0) msg += ` • تم استبعاد ${removed} كتب تجاوزت السنة`;
-        showToast(msg, 'success');
-    }, 2500);
+ renderItems(filtered);
 }
 
-function showUpdateAnimation() {
-    let bar = document.getElementById('progressBar');
-    bar.style.width = '0%';
-    bar.classList.remove('active');
-    void bar.offsetWidth;
-    bar.classList.add('active');
-    setTimeout(() => { bar.style.width = '100%'; }, 50);
-    setTimeout(() => {
-        bar.classList.remove('active');
-        bar.style.width = '0%';
-    }, 3000);
+function renderItems(items){
+ const grid=document.getElementById('reviewsGrid');
+
+ if(!items.length){
+ grid.innerHTML='<div class="no-results"><div class="emoji">📖</div><p>لا توجد مراجعات مطابقة للفلاتر المحددة</p><p style="font-size:.85em;margin-top:8px">جرّب تغيير الفلاتر أو البحث بكلمات مختلفة</p></div>';
+ return;
+ }
+
+ grid.innerHTML=items.map(it=>{
+ const langClass=`lang-${it.language}`;
+ const langLabel=it.language==='ar'?'عربي':it.language==='fr'?'Français':'English';
+
+ const typeLabel={review:'📖 مراجعة كتاب',article:'📄 مقال',chapter:'📑 فصل',thesis:'🎓 أطروحة'}[it.type]||'📄 مقال';
+ const typeClass={review:'type-review',article:'type-article',chapter:'type-chapter',thesis:'type-thesis'}[it.type]||'type-article';
+
+ const date=it.publication_date? new Date(it.publication_date).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}): '';
+
+ const doiLink=it.doi?`https://doi.org/${it.doi}`:'';
+ const mainUrl=it.url||doiLink||'';
+
+ return `
+  <div class="review-card">
+  <div class="review-header">
+   <span class="review-type-badge ${typeClass}">${typeLabel}</span>
+   <span class="lang-badge ${langClass}">${langLabel}</span>
+   <div class="review-title">${escHtml(it.title)}</div>
+   <div class="review-authors">✍ ${escHtml((it.authors||[]).join('، ')||'غير محدد')}</div>
+   ${it.journal?`<div class="review-journal">📰 ${escHtml(it.journal)}</div>`:''}
+   <div class="review-meta">
+   ${date?`<span>📅 ${date}</span>`:''}
+   ${it.volume?`<span>📁 مجلد ${escHtml(it.volume)}</span>`:''}
+   ${it.issue?`<span>العدد ${escHtml(it.issue)}</span>`:''}
+   ${it.pages?`<span>📄 ${escHtml(it.pages)}</span>`:''}
+   ${it.cited_by?`<span>📊 ${it.cited_by} استشهاد</span>`:''}
+   <span>📡 ${escHtml(it.source)}</span>
+   </div>
+  </div>
+  <div class="review-body">
+   ${it.description?`<div class="review-desc">${escHtml(it.description)}</div>`:''}
+   <div class="review-topics">
+   ${it.topics.slice(0,5).map(t=>`<span class="topic-tag">${escHtml(t)}</span>`).join('')}
+   </div>
+   <div class="review-actions">
+   ${mainUrl?`<a href="${escHtml(mainUrl)}" target="_blank" rel="noopener" class="btn-link btn-primary">🔗 الرابط</a>`:''}
+   ${it.doi?`<a href="https://doi.org/${escHtml(it.doi)}" target="_blank" rel="noopener" class="btn-link btn-secondary">DOI</a>`:''}
+   ${it.doi?`<a href="https://scholar.google.com/scholar?q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener" class="btn-link btn-secondary">Scholar</a>`:''}
+   </div>
+  </div>
+  </div>`;
+ }).join('');
 }
 
-function toggleAutoUpdate() {
-    autoUpdateEnabled = !autoUpdateEnabled;
-    let toggle = document.getElementById('autoToggle');
-    toggle.classList.toggle('active', autoUpdateEnabled);
-    localStorage.setItem('arab_books_auto', autoUpdateEnabled ? '1' : '0');
-
-    if (autoUpdateEnabled) {
-        showToast('🔄 التحديث التلقائي مفعّل', 'info');
-        startCountdown();
-    } else {
-        showToast('⏸️ التحديث التلقائي متوقف', 'warning');
-    }
+// ═══════════════════════════════════════════════════
+// الإحصائيات
+// ═══════════════════════════════════════════════════
+function updateStats(){
+ document.getElementById('totalCount').textContent=ALL_ITEMS.length;
+ document.getElementById('arCount').textContent=ALL_ITEMS.filter(i=>i.language==='ar').length;
+ document.getElementById('frCount').textContent=ALL_ITEMS.filter(i=>i.language==='fr').length;
+ document.getElementById('enCount').textContent=ALL_ITEMS.filter(i=>i.language==='en').length;
+ const journals=new Set(ALL_ITEMS.map(i=>i.journal).filter(Boolean));
+ document.getElementById('journalCount').textContent=journals.size;
+ document.getElementById('sourceCount').textContent=SOURCES_LIST.length;
 }
 
-function saveUpdateTime() {
-    let t = now();
-    localStorage.setItem('arab_books_last_update', t.toISOString());
-    document.getElementById('lastUpdateTime').textContent =
-        `${fmtDate(t)} - ${fmtTime(t)}`;
+function updateLastTime(){
+ document.getElementById('lastUpdate').textContent='آخر تحديث: '+
+ new Date().toLocaleString('ar-EG',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
 }
 
-function loadUpdateTime() {
-    let saved = localStorage.getItem('arab_books_last_update');
-    if (saved) {
-        let d = new Date(saved);
-        document.getElementById('lastUpdateTime').textContent =
-            `${fmtDate(d)} - ${fmtTime(d)}`;
-
-        // إذا مر أكثر من يوم منذ آخر تحديث، حدّث تلقائياً
-        if (now() - d > 864e5 && autoUpdateEnabled) {
-            setTimeout(() => performAutoUpdate(), 2000);
-        }
-    } else {
-        saveUpdateTime();
-    }
+// ═══════════════════════════════════════════════════
+// المصادر
+// ═══════════════════════════════════════════════════
+function toggleSources(){
+ const el=document.getElementById('sourcesList');
+ el.classList.toggle('open');
+ if(el.classList.contains('open')&&!el.innerHTML){
+ el.innerHTML=SOURCES_LIST.map((s,i)=>`${i+1}. ${s}`).join('<br>');
+ }
 }
 
-// ========== العرض ==========
-
-function renderAll() {
-    renderBooks();
-    renderMap();
-    updateStats();
-    updateDateRange();
+// ═══════════════════════════════════════════════════
+// التحديث اليدوي
+// ═══════════════════════════════════════════════════
+function manualRefresh(){
+ localStorage.removeItem(CACHE_KEY);
+ fetchAllReviews();
 }
 
-function updateStats() {
-    let active = activeBooks();
-    let thisMonth = active.filter(b => daysSince(b.publishDate) <= 30).length;
-    let expiring = active.filter(b => daysLeft(b.publishDate) <= 30).length;
-    let authors = new Set(active.map(b => b.author));
+// ═══════════════════════════════════════════════════
+// البداية — كاش يومي + تنظيف كل ما تجاوز سنتين
+// ═══════════════════════════════════════════════════
+(async function init(){
+ try{
+ const cache=JSON.parse(localStorage.getItem(CACHE_KEY));
+ if(cache && (Date.now()-cache.timestamp)<CACHE_MS){
+  ALL_ITEMS=(cache.items||[]).filter(it=>isWithinTwoYears(it.publication_date));
+  updateStats();
+  filterItems();
+  updateLastTime();
+  console.log('✅ كاش:',ALL_ITEMS.length,'مراجعة');
+  const remaining=CACHE_MS-(Date.now()-cache.timestamp);
+  setTimeout(()=>fetchAllReviews(),remaining);
+  return;
+ }
+ }catch(e){}
+ await fetchAllReviews();
+})();
 
-    document.getElementById('sTotal').textContent = active.length;
-    document.getElementById('sNew').textContent = thisMonth;
-    document.getElementById('sExpiring').textContent = expiring;
-    document.getElementById('sAuthors').textContent = authors.size;
-    document.getElementById('sFavs').textContent = favs.length;
-    document.getElementById('badgeCount').textContent = `📚 ${active.length} كتاب`;
-}
-
-function updateDateRange() {
-    let from = new Date();
-    from.setFullYear(from.getFullYear() - 1);
-    document.getElementById('dateRange').textContent =
-        `${from.getDate()} ${MONTHS_AR[from.getMonth()]} ${from.getFullYear()} → اليوم`;
-}
-
-function renderBooks() {
-    let grid = document.getElementById('booksGrid');
-    let list = filtered();
-    let active = activeBooks();
-
-    document.getElementById('resText').innerHTML =
-        `عرض <span>${list.length}</span> كتاب من أصل ${active.length}`;
-
-    if (list.length === 0) {
-        grid.innerHTML = `
-            <div class="no-results">
-                <div class="ni">📭</div>
-                <h3>لم يتم العثور على نتائج</h3>
-                <p>حاول تعديل البحث أو الفلاتر</p>
-            </div>`;
-        return;
-    }
-
-    grid.innerHTML = list.map(b => {
-        let d = daysSince(b.publishDate);
-        let left = daysLeft(b.publishDate);
-        let isFav = favs.includes(b.id);
-        let pd = new Date(b.publishDate);
-
-        let badgeClass = d <= 30 ? 'new-badge' : 'old-badge';
-        let badgeText = d <= 30 ? `🆕 ${daysLabel(d)}` : daysLabel(d);
-
-        let expiringTag = '';
-        if (left <= 30) {
-            expiringTag = `<span class="tg tg-n">⏳ يُستبعد خلال ${left} يوم</span>`;
-        }
-
-        return `
-        <div class="book-card">
-            <div class="ct">
-                <div class="cw">
-                    <div class="cv" style="background:${b.coverColor}">
-                        <span class="sp"></span>
-                        <span class="sh"></span>
-                        <span style="position:relative;z-index:2">${b.coverIcon}</span>
-                    </div>
-                    <span class="db ${badgeClass}">${badgeText}</span>
-                </div>
-                <div class="ci">
-                    <div class="bt">${b.titleAr}</div>
-                    <div class="be">${b.titleEn}</div>
-                    <div class="al"><span>✍️</span><span class="an">${b.author}</span></div>
-                    <div class="pl">🏢 ${b.publisher}</div>
-                </div>
-            </div>
-            <div class="cb">
-                <div class="mg">
-                    <div class="mi"><span>📅</span><span class="mv">${pd.getDate()} ${MONTHS_AR[pd.getMonth()]} ${pd.getFullYear()}</span></div>
-                    <div class="mi"><span>📄</span><span class="mv">${b.pages} صفحة</span></div>
-                    <div class="mi"><span>🌐</span><span class="mv">${b.language}</span></div>
-                    <div class="mi"><span>⏱️</span><span class="mv">${daysLabel(d)}</span></div>
-                </div>
-                <div class="tr2">
-                    ${b.categories.map(c=>`<span class="tg tg-c">${c}</span>`).join('')}
-                    <span class="tg tg-r">📍 ${b.region}</span>
-                    ${b.isBestseller?'<span class="tg tg-b">⭐ الأكثر مبيعاً</span>':''}
-                    ${d<=30?'<span class="tg tg-n">🔥 جديد</span>':''}
-                    ${expiringTag}
-                    ${b.tags.map(t=>`<span class="tg tg-l">${t}</span>`).join('')}
-                </div>
-                <div class="dx">${b.description}</div>
-                <div class="cr">
-                    ${b.countries.map(c=>`<span class="ctg">📍 ${c}</span>`).join('')}
-                </div>
-            </div>
-            <div class="cf">
-                <div class="rd">
-                    <span class="st">${stars(b.rating)}</span>
-                    <span class="rv">${b.rating}/5</span>
-                </div>
-                <div class="ca">
-                    <button class="ab ${isFav?'sv':''}" onclick="toggleFav(${b.id})">
-                        ${isFav?'❤️ محفوظ':'🤍 حفظ'}
-                    </button>
-                    <button class="ab sh" onclick="share(${b.id})">📤</button>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-}
-
-function renderMap() {
-    let active = activeBooks();
-    document.getElementById('countriesGrid').innerHTML = ARAB_COUNTRIES.map(c => {
-        let count = active.filter(b =>
-            b.countries.some(x => x.includes(c.n)) ||
-            b.countries.includes('جميع الدول العربية') ||
-            b.countries.includes('العالم العربي') ||
-            b.countries.includes('22 دولة عربية') ||
-            b.countries.includes('14 دولة عربية')
-        ).length;
-        return `
-            <div class="cc" onclick="searchCountry('${c.n}')">
-                <div class="cf2">${c.f}</div>
-                <div class="cn">${c.n}</div>
-                <div class="co">📚 ${count}</div>
-            </div>`;
-    }).join('');
-}
-
-// ========== الأحداث ==========
-
-function setCat(c, el) {
-    catFilter = c;
-    document.querySelectorAll('#catF .f-chip').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-    renderBooks();
-}
-
-function setReg(r, el) {
-    regFilter = r;
-    document.querySelectorAll('#regF .r-chip').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-    renderBooks();
-}
-
-function doSort() {
-    sort = document.getElementById('sortSelect').value;
-    renderBooks();
-}
-
-function setView(m) {
-    let g = document.getElementById('booksGrid');
-    document.querySelectorAll('.v-btn').forEach(b=>b.classList.remove('active'));
-    if (m==='list') {
-        g.classList.add('list-mode');
-        document.querySelectorAll('.v-btn')[1].classList.add('active');
-    } else {
-        g.classList.remove('list-mode');
-        document.querySelectorAll('.v-btn')[0].classList.add('active');
-    }
-}
-
-function searchCountry(n) {
-    document.getElementById('searchInput').value = n;
-    query = n.toLowerCase();
-    renderBooks();
-    window.scrollTo({top:500,behavior:'smooth'});
-}
-
-function toggleFav(id) {
-    let i = favs.indexOf(id);
-    if (i > -1) {
-        favs.splice(i, 1);
-        showToast('تم الإزالة من القائمة', 'info');
-    } else {
-        favs.push(id);
-        showToast('✓ تم الإضافة إلى قائمة القراءة', 'success');
-    }
-    localStorage.setItem('arab_books_favs', JSON.stringify(favs));
-    document.getElementById('fabBadge').textContent = favs.length;
-    document.getElementById('sFavs').textContent = favs.length;
-    renderBooks();
-}
-
-function share(id) {
-    let b = ALL_BOOKS.find(x=>x.id===id);
-    let txt = `📚 ${b.titleAr}\n✍️ ${b.author}\n🏢 ${b.publisher}\n\nمن مرصد كتب الشأن العربي`;
-    if (navigator.share) {
-        navigator.share({title:b.titleAr, text:txt});
-    } else {
-        navigator.clipboard.writeText(txt).then(()=>showToast('📋 تم النسخ','info'));
-    }
-}
-
-function openModal() {
-    let body = document.getElementById('modalBody');
-    let active = activeBooks();
-    let valid = favs.filter(id => active.find(b=>b.id===id));
-
-    if (valid.length === 0) {
-        body.innerHTML = `
-            <div class="es">
-                <div class="ei">📭</div>
-                <p>قائمة القراءة فارغة</p>
-                <p class="eh">اضغط 🤍 لإضافة كتب</p>
-            </div>`;
-    } else {
-        body.innerHTML = valid.map(id => {
-            let b = active.find(x=>x.id===id);
-            if (!b) return '';
-            let left = daysLeft(b.publishDate);
-            let warn = left <= 30 ? `<span style="color:var(--danger);font-size:0.72em"> ⚠️ يُستبعد خلال ${left} يوم</span>` : '';
-            return `
-                <div class="ri">
-                    <div>
-                        <div class="rt">${b.coverIcon} ${b.titleAr}</div>
-                        <div class="rm">✍️ ${b.author} ${warn}</div>
-                    </div>
-                    <button class="rr" onclick="toggleFav(${b.id});openModal()">إزالة ✕</button>
-                </div>`;
-        }).join('');
-    }
-    document.getElementById('modalBg').classList.add('open');
-}
-
-function closeModal() {
-    document.getElementById('modalBg').classList.remove('open');
-}
-
-function showToast(msg, type='success') {
-    let t = document.getElementById('toastMsg');
-    t.textContent = msg;
-    t.className = `toast-msg ${type} visible`;
-    setTimeout(()=>t.classList.remove('visible'), 3000);
-}
-
-function createParticles() {
-    let c = document.getElementById('particles');
-    for (let i=0; i<25; i++) {
-        let s = document.createElement('span');
-        s.style.left = Math.random()*100+'%';
-        s.style.animationDuration = (10+Math.random()*20)+'s';
-        s.style.animationDelay = Math.random()*15+'s';
-        let sz = (2+Math.random()*3)+'px';
-        s.style.width = sz;
-        s.style.height = sz;
-        c.appendChild(s);
-    }
-}
-
-// ========== التهيئة ==========
-
-document.addEventListener('DOMContentLoaded', () => {
-    // تحميل الإعدادات
-    let savedAuto = localStorage.getItem('arab_books_auto');
-    if (savedAuto === '0') {
-        autoUpdateEnabled = false;
-        document.getElementById('autoToggle').classList.remove('active');
-    }
-
-    // التهيئة
-    createParticles();
-    loadUpdateTime();
-    renderAll();
-    startCountdown();
-
-    document.getElementById('fabBadge').textContent = favs.length;
-
-    // البحث
-    document.getElementById('searchInput').addEventListener('input', e => {
-        query = e.target.value.toLowerCase();
-        renderBooks();
-    });
-
-    // زر الصعود
-    window.addEventListener('scroll', () => {
-        document.getElementById('scrollUp').classList.toggle('show', window.scrollY > 500);
-    });
-
-    // إغلاق النافذة
-    document.getElementById('modalBg').addEventListener('click', e => {
-        if (e.target === e.currentTarget) closeModal();
-    });
-
-    // التحديث التلقائي كل 24 ساعة (احتياطي)
-    setInterval(() => {
-        if (autoUpdateEnabled) {
-            let lastUpdate = localStorage.getItem('arab_books_last_update');
-            if (lastUpdate && (now() - new Date(lastUpdate)) > 864e5) {
-                performAutoUpdate();
-            }
-        }
-    }, 60000); // فحص كل دقيقة
-
-    // طباعة تقرير في الكونسول
-    let active = activeBooks();
-    let excluded = ALL_BOOKS.length - active.length;
-    console.log(`%c📚 مرصد كتب الشأن العربي`, 'font-size:18px;font-weight:bold;color:#d4a017');
-    console.log(`📅 تاريخ اليوم: ${fmtDate(now())}`);
-    console.log(`📚 كتب متاحة: ${active.length}`);
-    console.log(`🗑️ كتب مستبعدة (تجاوزت السنة): ${excluded}`);
-    console.log(`⏳ ستُستبعد قريباً (خلال 30 يوم): ${active.filter(b=>daysLeft(b.publishDate)<=30).length}`);
-    console.log(`🔄 التحديث التلقائي: ${autoUpdateEnabled?'مفعّل':'متوقف'}`);
-});
+// تحديث تلقائي كل 24 ساعة
+setInterval(()=>{console.log('🔄 تحديث يومي تلقائي');fetchAllReviews()},CACHE_MS);
 </script>
 </body>
 </html>
