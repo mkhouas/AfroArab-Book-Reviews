@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مرصد مراجعات الكتب — السياسة والاقتصاد في أفريقيا والعالم العربي</title>
+<title>مرصد مراجعات الكتب — السياسة والعلاقات الدولية في أفريقيا والعالم العربي والشرق الأوسط</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
---bg:#f8f9fa;--card:#fff;--text:#1a1a2e;--text2:#555;
---accent:#8b1a1a;--accent2:#a52a2a;--gold:#b8860b;
---ar:#059669;--fr:#1d4ed8;--en:#6d28d9;
---review:#8b1a1a;
---shadow:0 2px 15px rgba(0,0,0,.05);--radius:14px;
+  --bg:#f8f9fa;--card:#fff;--text:#1a1a2e;--text2:#555;
+  --accent:#8b1a1a;--accent2:#a52a2a;--gold:#b8860b;
+  --ar:#059669;--fr:#1d4ed8;--en:#6d28d9;
+  --review:#8b1a1a;
+  --shadow:0 2px 15px rgba(0,0,0,.05);--radius:14px
 }
 body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;min-height:100vh}
 .hero{background:linear-gradient(135deg,#1a0a0a 0%,#3d0c0c 30%,#8b1a1a 70%,#b8860b 100%);color:#fff;padding:48px 20px;text-align:center;position:relative;overflow:hidden}
@@ -41,7 +41,8 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg);color:v
 .live-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .refresh-btn{padding:8px 18px;border-radius:50px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-size:.82em;font-weight:600;transition:background .3s}
-.refresh-btn:hover{background:var(--accent2)}.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
+.refresh-btn:hover{background:var(--accent2)}
+.refresh-btn:disabled{opacity:.5;cursor:not-allowed}
 .progress-bar{max-width:1400px;margin:0 auto 10px;padding:0 20px;display:none}
 .progress-track{height:4px;background:#e0e0e0;border-radius:4px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:4px;transition:width .4s}
@@ -86,727 +87,1121 @@ footer{text-align:center;padding:28px 20px;font-size:.78em;color:var(--text2);bo
 <body>
 
 <div class="hero">
-<h1>📖 مرصد مراجعات الكتب السياسية والاقتصادية<br>للشؤون الأفريقية والعربية</h1>
-<p class="sub">حصريًّا مراجعات الكتب (Book Reviews) فقط — فلترة فائقة الصرامة<br>السياسة والحكم والاقتصاد في أفريقيا والعالم العربي — تبقى سنتين • تحديث يومي</p>
-<div class="scope">
-<span>🏛️ السياسة والحكم</span><span>💰 الاقتصاد السياسي</span>
-<span>🗳️ الديمقراطية</span><span>⚔️ الصراعات</span><span>🤝 العلاقات الدولية</span>
-</div>
+  <h1>📚 مرصد مراجعات الكتب السياسية والجيوسياسية<br>للشؤون الأفريقية والعربية والشرق أوسطية</h1>
+  <p class="sub">حصرياً مراجعات الكتب (Book Reviews) فقط — فلترة فائقة الصرامة<br>السياسة والحكم والعلاقات الدولية والجيوسياسة وبناء الدولة في أفريقيا والعالم العربي والشرق الأوسط — تبقى سنتين • تحديث يومي</p>
+  <div class="scope">
+    <span>🏛️ السياسة والحكم</span><span>💰 الاقتصاد السياسي</span>
+    <span>🌐 العلاقات الدولية</span><span>🗺️ الجيوسياسة</span><span>⚔️ الصراعات</span><span>🏗️ بناء الدولة</span><span>🗳️ الديمقراطية</span>
+  </div>
 </div>
 
 <div class="stats-bar">
-<div class="stat-card"><div class="num" id="totalCount">-</div><div class="lbl">📖 مراجعات مقبولة</div></div>
-<div class="stat-card"><div class="num" id="arCount" style="color:var(--ar)">-</div><div class="lbl">🇸🇦 عربي</div></div>
-<div class="stat-card"><div class="num" id="frCount" style="color:var(--fr)">-</div><div class="lbl">🇫🇷 فرنسي</div></div>
-<div class="stat-card"><div class="num" id="enCount" style="color:var(--en)">-</div><div class="lbl">🇬🇧 إنجليزي</div></div>
-<div class="stat-card"><div class="num" id="journalCount" style="color:var(--gold)">-</div><div class="lbl">📰 دوريات</div></div>
-<div class="stat-card"><div class="num" id="rejectedCount" style="color:#ef4444">-</div><div class="lbl">🚫 مستبعد</div></div>
+  <div class="stat-card"><div class="num" id="totalCount">-</div><div class="lbl">📋 مراجعات مقبولة</div></div>
+  <div class="stat-card"><div class="num" id="arCount" style="color:var(--ar)">-</div><div class="lbl">🇸🇦 عربي</div></div>
+  <div class="stat-card"><div class="num" id="frCount" style="color:var(--fr)">-</div><div class="lbl">🇫🇷 فرنسي</div></div>
+  <div class="stat-card"><div class="num" id="enCount" style="color:var(--en)">-</div><div class="lbl">🇬🇧 إنجليزي</div></div>
+  <div class="stat-card"><div class="num" id="journalCount" style="color:var(--gold)">-</div><div class="lbl">📰 دوريات</div></div>
+  <div class="stat-card"><div class="num" id="rejectedCount" style="color:#ef4444">-</div><div class="lbl">🚫 مستبعد</div></div>
 </div>
 
 <div class="controls">
-<input type="text" class="search-box" id="searchInput" placeholder="🔍 ابحث: عنوان، كتاب مُراجَع، مؤلف، دورية ..." oninput="filterItems()">
-<button class="filter-btn active" onclick="setLang('all',this)">الكل</button>
-<button class="filter-btn" onclick="setLang('ar',this)">🇸🇦 عربي</button>
-<button class="filter-btn" onclick="setLang('fr',this)">🇫🇷 فرنسي</button>
-<button class="filter-btn" onclick="setLang('en',this)">🇬🇧 إنجليزي</button>
-<select class="search-box" style="flex:none;width:200px" id="themeSelect" onchange="filterItems()">
-<option value="">📂 كل الموضوعات</option>
-<optgroup label="── المجال ──">
-<option value="Politics">السياسة</option><option value="Governance">الحكم</option>
-<option value="Economy">الاقتصاد</option><option value="Democracy">الديمقراطية</option>
-<option value="Conflict">الصراعات</option><option value="IR">العلاقات الدولية</option>
-</optgroup>
-<optgroup label="── المنطقة ──">
-<option value="North Africa">شمال أفريقيا</option><option value="Sahel">الساحل</option>
-<option value="Horn of Africa">القرن الأفريقي</option><option value="West Africa">غرب أفريقيا</option>
-<option value="East Africa">شرق أفريقيا</option><option value="Gulf">الخليج</option>
-<option value="Levant">المشرق</option><option value="Sudan">السودان</option>
-</optgroup>
-</select>
-<select class="search-box" style="flex:none;width:160px" id="sortSelect" onchange="filterItems()">
-<option value="date">الأحدث</option><option value="title">أبجدي</option>
-</select>
+  <input type="text" class="search-box" id="searchInput" placeholder="🔍 ابحث: عنوان، كتاب مُراجَع، مؤلف، دورية ..." oninput="filterItems()">
+  <button class="filter-btn active" onclick="setLang('all',this)">الكل</button>
+  <button class="filter-btn" onclick="setLang('ar',this)">🇸🇦 عربي</button>
+  <button class="filter-btn" onclick="setLang('fr',this)">🇫🇷 فرنسي</button>
+  <button class="filter-btn" onclick="setLang('en',this)">🇬🇧 إنجليزي</button>
+  <select class="search-box" style="flex:none;width:220px" id="themeSelect" onchange="filterItems()">
+    <option value="">🏷️ كل الموضوعات</option>
+    <optgroup label="── المجال ──">
+      <option value="Politics">السياسة</option>
+      <option value="Governance">الحكم</option>
+      <option value="Economy">الاقتصاد</option>
+      <option value="Democracy">الديمقراطية</option>
+      <option value="Conflict">الصراعات</option>
+      <option value="IR">العلاقات الدولية</option>
+      <option value="Geopolitics">الجيوسياسة</option>
+      <option value="State-Building">بناء الدولة</option>
+      <option value="Security">الأمن</option>
+      <option value="Migration">الهجرة</option>
+    </optgroup>
+    <optgroup label="── المنطقة ──">
+      <option value="North Africa">شمال أفريقيا</option>
+      <option value="Sahel">الساحل</option>
+      <option value="Horn of Africa">القرن الأفريقي</option>
+      <option value="West Africa">غرب أفريقيا</option>
+      <option value="East Africa">شرق أفريقيا</option>
+      <option value="Central Africa">وسط أفريقيا</option>
+      <option value="Southern Africa">جنوب أفريقيا</option>
+      <option value="Gulf">الخليج</option>
+      <option value="Levant">المشرق</option>
+      <option value="Sudan">السودان</option>
+      <option value="Egypt">مصر</option>
+      <option value="Morocco">المغرب</option>
+      <option value="Algeria">الجزائر</option>
+      <option value="Tunisia">تونس</option>
+      <option value="Libya">ليبيا</option>
+      <option value="Turkey">تركيا</option>
+      <option value="Iran">إيران</option>
+    </optgroup>
+  </select>
+  <select class="search-box" style="flex:none;width:160px" id="sortSelect" onchange="filterItems()">
+    <option value="date">الأحدث</option>
+    <option value="title">أبجدي</option>
+  </select>
 </div>
 
 <div class="notice">
-<p>⚠️ <strong>فلترة فائقة الصرامة (4 مستويات):</strong> ① Crossref type = "book-review" أو ② العنوان يحتوي صراحةً على عبارة مراجعة كتاب ③ العنوان يحتوي اسم كتاب ومؤلفه (بنية مراجعة) ④ لا يحتوي أي مصطلح مقال بحثي — أي شك → استبعاد فوري.</p>
+  <p>⚠️ <strong>فلترة فائقة الصرامة (4 مستويات):</strong> ① Crossref type = "book-review" أو ② العنوان يحتوي صراحةً عبارة مراجعة كتاب ③ العنوان يحتوي اسم كتاب ومؤلفه (بنية مراجعة) ④ لا يحتوي أي مصطلح مقال بحثي — أي شك → استبعاد فوري.</p>
 </div>
 
 <div class="update-bar">
-<div class="live"><span class="live-dot"></span> تحديث يومي</div>
-<span id="lastUpdate">جارٍ التحميل...</span>
-<button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()">🔄 تحديث</button>
+  <div class="live"><span class="live-dot"></span> تحديث يومي</div>
+  <span id="lastUpdate">جارٍ التحميل...</span>
+  <button class="refresh-btn" id="refreshBtn" onclick="manualRefresh()">🔄 تحديث</button>
 </div>
 
 <div class="progress-bar" id="progressBar">
-<div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-<div class="progress-text" id="progressText"></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText"></div>
 </div>
 
 <div class="grid" id="grid">
-<div class="loader"><div class="spinner"></div><p>جارٍ جلب مراجعات الكتب...</p></div>
+  <div class="loader"><div class="spinner"></div><p>جارٍ جلب مراجعات الكتب...</p></div>
 </div>
 
 <footer>
-<p>مرصد مراجعات الكتب السياسية والاقتصادية — الشؤون الأفريقية والعربية © 2024–2026</p>
-<button class="stoggle" onclick="toggleSrc()">📚 عرض الدوريات</button>
-<div class="slist" id="srcList"></div>
+  <p>مرصد مراجعات الكتب السياسية والجيوسياسية — الشؤون الأفريقية والعربية والشرق أوسطية © 2024–2026</p>
+  <button class="stoggle" onclick="toggleSrc()">📋 عرض الدوريات</button>
+  <div class="slist" id="srcList"></div>
 </footer>
 
 <script>
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // مرصد مراجعات الكتب — فلترة فائقة الصرامة 4 مستويات
-// ═══════════════════════════════════════════════════════════
+// النسخة 8.0 — موسَّعة بمجلات الجيوسياسة والعلاقات الدولية وبناء الدولة
+// ══════════════════════════════════════════════════════════
 
-let ALL=[],REJECTED=0,currentLang='all';
-const CK='strict_pol_reviews_v7',CMS=24*60*60*1000,TY=2*365*24*60*60*1000;
+let ALL = [], REJECTED = 0, currentLang = 'all';
+const CK = 'strict_pol_reviews_v8', CMS = 24*60*60*1000, TY = 2*365*24*60*60*1000;
 
-const JOURNALS=[
-"African Affairs","Journal of Modern African Studies","African Studies Review",
-"Review of African Political Economy","Journal of African History",
-"Politique Africaine","Cahiers d'Études Africaines","Afrique Contemporaine",
-"Africa Spectrum","Journal of Contemporary African Studies",
-"Journal of Eastern African Studies","Journal of Southern African Studies",
-"Journal of North African Studies","African Security","African Security Review",
-"Journal of African Law","Journal of African Elections","Journal of African Economies",
-"Middle East Journal","International Journal of Middle East Studies",
-"Middle Eastern Studies","British Journal of Middle Eastern Studies",
-"Middle East Policy","Middle East Critique","Review of Middle East Studies",
-"Arab Studies Quarterly","Contemporary Arab Affairs","Journal of Arabian Studies",
-"Die Welt des Islams","Journal of Islamic Studies","Bulletin of SOAS",
-"Revue des mondes musulmans et de la Méditerranée","Maghreb–Machrek",
-"L'Année du Maghreb","Third World Quarterly","Democratization",
-"International Affairs","Foreign Affairs","Journal of Democracy",
-"Governance","Government and Opposition","Comparative Politics",
-"Development and Change","World Development",
-"المستقبل العربي","سياسات عربية","عمران"
+// ══════════════════════════════════════════════════════════
+// قائمة الدوريات المستهدفة — موسَّعة
+// ══════════════════════════════════════════════════════════
+const JOURNALS = [
+  // أفريقيا العامة
+  "African Affairs",
+  "Journal of Modern African Studies",
+  "African Studies Review",
+  "Review of African Political Economy",
+  "Journal of African History",
+  "Politique Africaine",
+  "Cahiers d'Études Africaines",
+  "Afrique Contemporaine",
+  "Africa Spectrum",
+  "Journal of Contemporary African Studies",
+  "Journal of Eastern African Studies",
+  "Journal of Southern African Studies",
+  "Journal of North African Studies",
+  "African Security",
+  "African Security Review",
+  "Journal of African Law",
+  "Journal of African Elections",
+  "Journal of African Economies",
+  "African Studies",
+  "Africa: Journal of the International African Institute",
+  "African Affairs Quarterly",
+  "Journal of African Political Economy",
+  "Afrika Zamani",
+  "African Conflict and Peacebuilding Review",
+  "Journal of African Development",
+  "African Identities",
+  "African Renaissance",
+  "African Governance and Development Institute Journal",
+  // الشرق الأوسط والعالم العربي
+  "Middle East Journal",
+  "International Journal of Middle East Studies",
+  "Middle Eastern Studies",
+  "British Journal of Middle Eastern Studies",
+  "Middle East Policy",
+  "Middle East Critique",
+  "Review of Middle East Studies",
+  "Arab Studies Quarterly",
+  "Contemporary Arab Affairs",
+  "Journal of Arabian Studies",
+  "Die Welt des Islams",
+  "Journal of Islamic Studies",
+  "Bulletin of SOAS",
+  "Revue des mondes musulmans et de la Méditerranée",
+  "Maghreb–Machrek",
+  "L'Année du Maghreb",
+  "Mediterranean Politics",
+  "Middle East Law and Governance",
+  "Arab Studies Journal",
+  "Journal of Palestine Studies",
+  "Jerusalem Quarterly",
+  "Journal of Arabian Studies",
+  "Mashriq & Mahjar",
+  "Journal of North African Studies",
+  "Hesperis-Tamuda",
+  "Insaniyat",
+  "El-Bahith Journal",
+  // العلاقات الدولية والجيوسياسة
+  "International Affairs",
+  "Foreign Affairs",
+  "International Security",
+  "International Organization",
+  "World Politics",
+  "Journal of International Relations and Development",
+  "International Studies Quarterly",
+  "Global Governance",
+  "Security Studies",
+  "Journal of Strategic Studies",
+  "Geopolitics",
+  "Political Geography",
+  "Territory, Politics, Governance",
+  "Small Wars and Insurgencies",
+  "Civil Wars",
+  "Journal of Conflict Resolution",
+  "Conflict, Security & Development",
+  "Journal of Intervention and Statebuilding",
+  "Journal of Peace Research",
+  "International Peacekeeping",
+  "Global Policy",
+  "International Studies Review",
+  "Review of International Studies",
+  "European Journal of International Relations",
+  "Cambridge Review of International Affairs",
+  "Survival: Global Politics and Strategy",
+  "The Washington Quarterly",
+  "Third World Quarterly",
+  // بناء الدولة والحوكمة
+  "Governance",
+  "Government and Opposition",
+  "Comparative Politics",
+  "Comparative Political Studies",
+  "Journal of Democracy",
+  "Democratization",
+  "Democratization Studies",
+  "Journal of Comparative Politics",
+  "Development and Change",
+  "World Development",
+  "Journal of Development Studies",
+  "Development Policy Review",
+  "Public Administration and Development",
+  "Journal of Peacebuilding & Development",
+  "Stability: International Journal of Security & Development",
+  "Journal of Statebuilding and Governance",
+  // الديمقراطية والحقوق
+  "Human Rights Quarterly",
+  "Human Rights Review",
+  "Journal of Human Rights",
+  "African Human Rights Law Journal",
+  // الاقتصاد السياسي
+  "Political Economy of Development",
+  "Journal of African Economies",
+  "African Development Review",
+  "Journal of Modern African Studies",
+  // الهجرة والأمن
+  "Journal of Refugee Studies",
+  "Migration Studies",
+  "Forced Migration Review",
+  "Global Networks",
+  "Journal of Ethnic and Migration Studies",
+  // عربية
+  "المستقبل العربي",
+  "سياسات عربية",
+  "عمران",
+  "مجلة الدراسات الأفريقية",
+  "مجلة السياسة الدولية",
+  "شؤون عربية",
+  "مجلة العلوم السياسية",
+  "المجلة العربية للعلوم السياسية",
+  "مجلة دراسات الشرق الأوسط",
+  "مجلة الديمقراطية"
 ];
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // ★★★★ الفلتر فائق الصرامة — 4 مستويات ★★★★
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 
-// ── المستوى 0: رفض فوري — هذه ليست مراجعة كتاب أبدًا ──
+// المستوى 0: رفض فوري
 const INSTANT_REJECT = [
- /\bliterature\s+review\b/i,
- /\bsystematic\s+review\b/i,
- /\bscoping\s+review\b/i,
- /\bmeta[\s-]*analy/i,
- /\beditorial\b/i,
- /\bletter\s+to\s+(the\s+)?editor/i,
- /\bcorrespond(ence|ance)\b/i,
- /\bcorrigend/i,
- /\berrat[ua]/i,
- /\bobituari/i,
- /\bforeword\b/i,
- /\bpreface\b/i,
- /\bintroduction\s+(to\s+)?(the\s+)?special/i,
- /\bspecial\s+issue\b/i,
- /\bguest\s+editor/i,
- /\bconference\s+(report|proceedings)\b/i,
- /\bfilm\s+review\b/i,
- /\bexhibition\s+review\b/i,
- /\bperformance\s+review\b/i,
- /\btheater?\s+review\b/i,
- /\bmusic\s+review\b/i,
- /\balbum\s+review\b/i,
- /\bsoftware\s+review\b/i,
- /\bpeer[\s-]+review\b/i,
- /\bannual\s+report\b/i,
- /\bworking\s+paper\b/i,
- /\bpolicy\s+(brief|paper)\b/i,
- /\bdiscussion\s+paper\b/i,
- /\bresearch\s+(article|note|paper)\b/i,
- /\boriginal\s+(article|research)\b/i,
- /\bempirical\s+(study|analysis|research)\b/i,
- /\bcase\s+study\b/i,
- /\bfield\s+(research|work|study)\b/i,
- /\bsurvey\s+(of|research|data)\b/i,
- /\bquantitative\s+(analysis|study|research)\b/i,
- /\bqualitative\s+(analysis|study|research)\b/i,
- /\bmixed[\s-]+method/i,
- /\bethno(graph|logi)/i,
- /\binterview[\s-]+based\b/i,
- /\bhypothes[ie]s\b/i,
- /\bfindings\s+(suggest|show|indicate|reveal)\b/i,
- /\bthis\s+(article|paper|study)\s+(examines|explores|investigates|analyses|analyzes|argues|shows|demonstrates|presents|proposes)\b/i,
- /\bwe\s+(argue|show|find|examine|explore|demonstrate|analyze|analyse|investigate|propose)\b/i,
- /\bthis\s+study\b/i,
- /\bour\s+(analysis|findings|results|research|data)\b/i,
- /\bin\s+this\s+(article|paper)\b/i,
- /\bdata\s+(from|collected|gathered|show)\b/i,
- /\bregression\b/i,
- /\bstatistical(ly)?\b/i,
- /\bcomparative\s+(analysis|study|politics)\b/i,
- /\bimpact\s+of\b.*\bon\b/i,
- /\bdeterminants\s+of\b/i,
- /\brole\s+of\b.*\bin\b/i,
- /\bchallenges?\s+(of|facing|to)\b/i,
- /\bdynamics\s+of\b/i,
- /\btransformation\s+of\b/i,
- /\btoward[s]?\s+a\b/i,
- /\brethinking\b/i,
- /\breconsidering\b/i,
- /\bbeyond\b.*\b:\b/i,
- /\bbetween\b.*\band\b.*\b:\b/i,
+  /\bliterature\s+review\b/i,
+  /\bsystematic\s+review\b/i,
+  /\bscoping\s+review\b/i,
+  /\bmeta[\s-]*analy/i,
+  /\beditorial\b/i,
+  /\bletter\s+to\s+(the\s+)?editor/i,
+  /\bcorrespond(ence|ance)\b/i,
+  /\bcorrigend/i,
+  /\berrat[ua]/i,
+  /\bobituari/i,
+  /\bforeword\b/i,
+  /\bpreface\b/i,
+  /\bintroduction\s+(to\s+)?(the\s+)?special/i,
+  /\bspecial\s+issue\b/i,
+  /\bguest\s+editor/i,
+  /\bconference\s+(report|proceedings)\b/i,
+  /\bfilm\s+review\b/i,
+  /\bexhibition\s+review\b/i,
+  /\bperformance\s+review\b/i,
+  /\btheater?\s+review\b/i,
+  /\bmusic\s+review\b/i,
+  /\balbum\s+review\b/i,
+  /\bsoftware\s+review\b/i,
+  /\bpeer[\s-]+review\b/i,
+  /\bannual\s+report\b/i,
+  /\bworking\s+paper\b/i,
+  /\bpolicy\s+(brief|paper)\b/i,
+  /\bdiscussion\s+paper\b/i,
+  /\bresearch\s+(article|note|paper)\b/i,
+  /\boriginal\s+(article|research)\b/i,
+  /\bempirical\s+(study|analysis|research)\b/i,
+  /\bcase\s+study\b/i,
+  /\bfield\s+(research|work|study)\b/i,
+  /\bsurvey\s+(of|research|data)\b/i,
+  /\bquantitative\s+(analysis|study|research)\b/i,
+  /\bqualitative\s+(analysis|study|research)\b/i,
+  /\bmixed[\s-]+method/i,
+  /\bethno(graph|logi)/i,
+  /\binterview[\s-]+based\b/i,
+  /\bhypothes[ie]s\b/i,
+  /\bfindings\s+(suggest|show|indicate|reveal)\b/i,
+  /\bthis\s+(article|paper|study)\s+(examines|explores|investigates|analyses|analyzes|argues|shows|demonstrates|presents|proposes)\b/i,
+  /\bwe\s+(argue|show|find|examine|explore|demonstrate|analyze|analyse|investigate|propose)\b/i,
+  /\bthis\s+study\b/i,
+  /\bour\s+(analysis|findings|results|research|data)\b/i,
+  /\bin\s+this\s+(article|paper)\b/i,
+  /\bdata\s+(from|collected|gathered|show)\b/i,
+  /\bregression\b/i,
+  /\bstatistical(ly)?\b/i,
+  /\bcomparative\s+(analysis|study|politics)\b/i,
+  /\bimpact\s+of\b.*\bon\b/i,
+  /\bdeterminants\s+of\b/i,
+  /\brole\s+of\b.*\bin\b/i,
+  /\bchallenges?\s+(of|facing|to)\b/i,
+  /\bdynamics\s+of\b/i,
+  /\btransformation\s+of\b/i,
+  /\btoward[s]?\s+a\b/i,
+  /\brethinking\b/i,
+  /\breconsidering\b/i,
+  /\bbeyond\b.*\b:\b/i,
+  /\bbetween\b.*\band\b.*\b:\b/i
 ];
 
-// ── المستوى 1: تأكيد Crossref — type === "book-review" ──
+// المستوى 1
 function isCrossrefBookReview(item) {
- return item._ctype === 'book-review';
+  return item._ctype === 'book-review';
 }
 
-// ── المستوى 2: العنوان يحتوي عبارة مراجعة كتاب صريحة ──
+// المستوى 2: عبارات مراجعة صريحة
 const EXPLICIT_REVIEW_PHRASES = [
- // إنجليزي — عبارات لا لبس فيها
- /^book\s+review\s*[:—–\-\.]/i,
- /^book\s+review$/i,
- /^review\s*[:—–\-]\s*[A-Z]/,
- /^review\s+of\s+/i,
- /^reviewed?\s+works?\s*:/i,
- /^review\s+essay\s*[:—–\-]/i,
- /\(book\s+review\)\s*$/i,
- /\[book\s+review\]\s*$/i,
- /\breview\s+of\s+.{10,}\.\s+by\s+/i,
- /\breview\s+of\s+.{10,},\s+by\s+/i,
- /^book\s+reviews?\s*$/i,
- /^books?\s+reviewed\s*$/i,
- // فرنسي
- /^comptes?\s+rendus?\s*[:—–\-\.]/i,
- /^comptes?\s+rendus?\s*$/i,
- /^recensions?\s*[:—–\-\.]/i,
- /^recensions?\s*$/i,
- /^notes?\s+de\s+lecture\s*[:—–\-\.]/i,
- /^lecture\s+critique\s*[:—–\-\.]/i,
- /^à\s+propos\s+(du|de|d[''])\s+(livre|ouvrage)\b/i,
- // عربي
- /^مراجعة\s+كتاب\s*[:—–\-\.]/,
- /^عرض\s+كتاب\s*[:—–\-\.]/,
- /^قراءة\s+(في|نقدية)\s+كتاب/,
- /^نقد\s+كتاب\s*[:—–\-\.]/,
- /^تقديم\s+كتاب\s*[:—–\-\.]/,
- /^حول\s+كتاب\s*[:—–\-\.]/,
- /^عرض\s+ومراجعة\s*[:—–\-\.]/,
- /^مراجعة\s+نقدية\s*[:—–\-\.]/,
- /^مراجعة\s*:\s*/,
- /^عرض\s*:\s*/,
+  /^book\s+review\s*[:—–\-\.]/i,
+  /^book\s+review$/i,
+  /^review\s*[:—–\-]\s*[A-Z]/,
+  /^review\s+of\s+/i,
+  /^reviewed?\s+works?\s*:/i,
+  /^review\s+essay\s*[:—–\-]/i,
+  /\(book\s+review\)\s*$/i,
+  /\[book\s+review\]\s*$/i,
+  /\breview\s+of\s+.{10,}\.\s+by\s+/i,
+  /\breview\s+of\s+.{10,},\s+by\s+/i,
+  /^book\s+reviews?\s*$/i,
+  /^books?\s+reviewed\s*$/i,
+  /^comptes?\s+rendus?\s*[:—–\-\.]/i,
+  /^comptes?\s+rendus?\s*$/i,
+  /^recensions?\s*[:—–\-\.]/i,
+  /^recensions?\s*$/i,
+  /^notes?\s+de\s+lecture\s*[:—–\-\.]/i,
+  /^lecture\s+critique\s*[:—–\-\.]/i,
+  /^à\s+propos\s+(du|de|d[''])\s+(livre|ouvrage)\b/i,
+  /^مراجعة\s+كتاب\s*[:\–—\-\.]/,
+  /^عرض\s+كتاب\s*[:\–—\-\.]/,
+  /^قراءة\s+(في|نقدية(\s+كتاب)?)/,
+  /^نقد\s+كتاب\s*[:\–—\-\.]/,
+  /^تقديم\s+كتاب\s*[:\–—\-\.]/,
+  /^حول\s+كتاب\s*[:\–—\-\.]/,
+  /^عرض\s+ومراجعة\s*[:\–—\-\.]/,
+  /^مراجعة\s+نقدية\s*[:\–—\-\.]/,
+  /^مراجعة\s*:\s*/,
+  /^عرض\s*:\s*/
 ];
 
-// ── المستوى 3: بنية العنوان تتبع نمط مراجعة كتاب ──
-// مراجعة كتاب حقيقية = تذكر عنوان الكتاب + مؤلفه
+// المستوى 3: بنية عنوان مراجعة
 const STRUCTURAL_PATTERNS = [
- // TITLE. By AUTHOR. Publisher, Year. Pages.
- /^.{10,}\.\s+by\s+.{3,}\.\s+.{3,},\s+\d{4}/i,
- // TITLE by AUTHOR (Publisher, Year)
- /^.{10,}\s+by\s+.{3,}\s+\(.{3,},\s+\d{4}\)/i,
- // TITLE, by AUTHOR
- /^.{10,},\s+by\s+.{5,}/i,
- // TITLE, par AUTEUR
- /^.{10,},\s+par\s+.{5,}/i,
- // TITLE (Author, Publisher, Year, pages pp.)
- /^.{10,}\s+\([A-Z].{3,},\s+\d{4},?\s+\d+\s*pp?\.\)/i,
- // Review of: TITLE
- /^review\s+of\s*:\s*.{10,}/i,
- // تأليف ... ، الناشر ، السنة
- /^.{10,}\s*[،,]\s*(تأليف|لـ?|بقلم)\s*.{5,}/,
+  /^.{10,}\.\s+by\s+.{3,}\.\s+.{3,},\s+\d{4}/i,
+  /^.{10,}\s+by\s+.{3,}\s+\(.{3,},\s+\d{4}\)/i,
+  /^.{10,},\s+by\s+.{5,}/i,
+  /^.{10,},\s+par\s+.{5,}/i,
+  /^.{10,}\s+\([A-Z].{3,},\s+\d{4},?\s+\d+\s*pp?\.\)/i,
+  /^review\s+of\s*:\s*.{10,}/i,
+  /^.{10,}\[\s*،\s*]\s*(تأليف|لـ?|بقلم)\s*.{,5},/
 ];
 
-// ═══ الفلتر النهائي فائق الصرامة ═══
+// الفلتر النهائي
 function isStrictBookReview(item) {
- const title = (item.title || '').trim();
- if (!title || title.length < 12) return false;
+  const title = (item.title || '').trim();
+  if (!title || title.length < 12) return false;
 
- // المستوى 0: رفض فوري إذا كان مقالاً بحثيًّا
- for (const rx of INSTANT_REJECT) {
-  if (rx.test(title)) return false;
- }
+  for (const rx of INSTANT_REJECT) {
+    if (rx.test(title)) return false;
+  }
 
- // نقاط الثقة
- let confidence = 0;
+  let confidence = 0;
 
- // المستوى 1: Crossref type = book-review → +100 (قبول مباشر)
- if (isCrossrefBookReview(item)) confidence += 100;
+  if (isCrossrefBookReview(item)) confidence += 100;
 
- // المستوى 2: عبارة مراجعة صريحة في العنوان → +80
- for (const rx of EXPLICIT_REVIEW_PHRASES) {
-  if (rx.test(title)) { confidence += 80; break; }
- }
+  for (const rx of EXPLICIT_REVIEW_PHRASES) {
+    if (rx.test(title)) { confidence += 80; break; }
+  }
 
- // المستوى 3: بنية عنوان مراجعة → +60
- for (const rx of STRUCTURAL_PATTERNS) {
-  if (rx.test(title)) { confidence += 60; break; }
- }
+  for (const rx of STRUCTURAL_PATTERNS) {
+    if (rx.test(title)) { confidence += 60; break; }
+  }
 
- // فحص إضافي: العنوان يحتوي "by" + اسم (نمط كتاب) → +20
- if (/\bby\s+[A-Z][a-z]+\s+[A-Z]/i.test(title)) confidence += 20;
+  if (/\bby\s+[A-Z][a-z]+\s+[A-Z]/i.test(title)) confidence += 20;
+  if (/\(\s*[A-Z].{2,},\s*\d{4}\s*\)/.test(title)) confidence += 15;
+  if (/\d+\s*pp\.?/i.test(title) || /\d+\s*pages?/i.test(title)) confidence += 15;
+  if (/isbn/i.test(item.description || '')) confidence += 10;
 
- // فحص إضافي: يحتوي ناشر أو سنة بين أقواس → +15
- if (/\(\s*[A-Z].{2,},\s*\d{4}\s*\)/.test(title)) confidence += 15;
+  if (/\b(analysis|study|investigation|assessment|evaluation|exploration|examination)\s+of\b/i.test(title)) confidence -= 50;
+  if (/\b(evidence\s+from|lessons?\s+from|insights?\s+from)\b/i.test(title)) confidence -= 50;
+  if (/\b(case\s+of|case:\s)\b/i.test(title)) confidence -= 40;
+  if (/\b(framework|model|theory|approach|perspective|paradigm)\b/i.test(title)) confidence -= 30;
+  if (/\?$/.test(title.trim())) confidence -= 20;
 
- // فحص إضافي: يحتوي عدد صفحات → +15
- if (/\d+\s*pp\.?/i.test(title) || /\d+\s*pages?/i.test(title)) confidence += 15;
-
- // فحص إضافي: يحتوي ISBN أو DOI في الوصف → +10
- if (/isbn/i.test(item.description||'')) confidence += 10;
-
- // فحص سلبي إضافي: كلمات تشير لمقال بحثي في العنوان → -50
- if (/\b(analysis|study|investigation|assessment|evaluation|exploration|examination)\s+of\b/i.test(title)) confidence -= 50;
- if (/\b(evidence\s+from|lessons?\s+from|insights?\s+from)\b/i.test(title)) confidence -= 50;
- if (/\b(case\s+of|case:\s)\b/i.test(title)) confidence -= 40;
- if (/\b(framework|model|theory|approach|perspective|paradigm)\b/i.test(title)) confidence -= 30;
- if (/\?$/.test(title.trim())) confidence -= 20; // مقالات بحثية كثيرة تنتهي بـ ?
-
- // الحد الأدنى للقبول: 50 نقطة
- return confidence >= 50;
+  return confidence >= 50;
 }
 
-// ═══════════════════════════════════════════════════════════
-// المستوى 4: الموضوع سياسي/اقتصادي + أفريقي/عربي
-// ═══════════════════════════════════════════════════════════
-const TOPIC_RX=[
-/politi[cq]/i,/govern(ance|ment|ing)/i,/regime/i,/state[\s-]?build/i,
-/democra[tc]/i,/autocra/i,/authoritar/i,/election/i,/parliament/i,
-/constitution/i,/sovereignty/i,/political\s*(economy|order|party|parties|power|reform|transition|violence|islam)/i,
-/civil\s*(war|society)/i,/revolution/i,/coup/i,/protest|uprising/i,
-/foreign\s*policy/i,/diplomacy/i,/international\s*relations/i,/geopoliti/i,
-/security|conflict|peace/i,/terrorism|extremism/i,/insurgency|rebellion|militia/i,
-/military|army/i,/human\s*rights/i,/rule\s*of\s*law/i,/corruption/i,
-/reform/i,/nationalism/i,/oil\s*politic/i,/resource\s*curse/i,
-/econom(y|ic)/i,/development/i,/trade/i,/fiscal|monetary/i,/debt|austerity/i,
-/poverty|inequality/i,/neoliberal/i,/privatiz/i,/globali[sz]/i,
-/invest(ment|or)/i,/labor|labour/i,/employ/i,/migration/i,
-/politiq/i,/gouvern/i,/démocrat/i,/élection/i,/économi/i,/développement/i,
-/conflit/i,/sécurité/i,/terroris/i,/diplom/i,/réforme/i,/corruption/i,
-/سياس/,/حكم|حوكمة/,/دولة/,/نظام/,/سلطة/,/ديمقراط/,/انتخاب/,/برلمان/,
-/اقتصاد/,/تنمية/,/صراع|نزاع/,/أمن/,/إرهاب/,/إصلاح/,/فساد/,
-/علاقات\s*دولية/,/دبلوماس/,/هجرة/,
+// ══════════════════════════════════════════════════════════
+// المستوى 4: الموضوع سياسي/جيوسياسي + أفريقي/عربي/شرق أوسطي
+// ══════════════════════════════════════════════════════════
+const TOPIC_RX = [
+  /politi[cq]/i, /govern(ance|ment|ing)/i, /regime/i, /state[\s-]?build/i,
+  /democra[tc]/i, /autocra/i, /authoritar/i, /election/i, /parliament/i,
+  /constitution/i, /sovereignty/i,
+  /political\s*(economy|order|party|parties|power|reform|transition|violence|islam|culture|system)/i,
+  /civil\s*(war|society)/i, /revolution/i, /coup/i, /protest|uprising/i,
+  /foreign\s*policy/i, /diplomacy/i, /international\s*relations/i,
+  /geopoliti/i, /geopolicy/i, /strategic/i, /grand\s*strategy/i,
+  /security|conflict|peace/i, /terrorism|extremism/i, /insurgency|rebellion|militia/i,
+  /military|army|armed\s*forces/i, /human\s*rights/i, /rule\s*of\s*law/i, /corruption/i,
+  /reform/i, /nationalism/i, /oil\s*politic/i, /resource\s*curse/i,
+  /econom(y|ic)/i, /development/i, /trade/i, /fiscal|monetary/i, /debt|austerity/i,
+  /poverty|inequality/i, /neoliberal/i, /privatiz/i, /globali[sz]/i,
+  /invest(ment|or)/i, /labor|labour/i, /employ/i, /migration/i, /refugee/i,
+  /statebuilding|peacebuilding|post-conflict/i,
+  /coloniali[sz]/i, /post.?colonial/i, /imperialism/i,
+  /politiq/i, /gouvern/i, /démocrat/i, /élection/i, /économi/i, /développement/i,
+  /conflit/i, /sécurité/i, /terroris/i, /diplom/i, /réforme/i, /corruption/i,
+  /géopoliti/i, /stratégi/i, /construction\s+de\s+l.état/i,
+  /سياس/, /حكم|حوكمة/, /دولة/, /نظام/, /سلطة/,
+  /ديمقراط/, /انتخاب/, /برلمان/, /اقتصاد/, /تنمية/,
+  /صراع|نزاع/, /أمن/, /إرهاب/, /إصلاح/, /فساد/,
+  /علاقات\s*دولية/, /دبلوماس/, /هجرة/, /لاجئ/,
+  /جيوسياس/, /استراتيج/, /بناء\s*الدولة/, /ما\s*بعد\s*الاستعمار/
 ];
 
-const GEO_RX=[
-/africa/i,/afrique/i,/أفريق/,
-/nigeria/i,/ethiopia/i,/kenya/i,/ghana/i,/senegal/i,/tanzania/i,/uganda/i,
-/cameroon/i,/congo/i,/mali\b/i,/niger\b/i,/burkina/i,/chad|tchad/i,
-/sudan/i,/somalia/i,/eritrea/i,/djibouti/i,/rwanda/i,/mozambique/i,
-/zimbabwe/i,/south\s*africa/i,/sahel/i,/maghreb/i,/horn\s*of\s*africa/i,
-/نيجيري/,/إثيوب/,/كيني/,/غانا/,/سنغال/,/تنزاني/,/أوغند/,
-/كونغو/,/مالي/,/السودان/,/الصومال/,/الساحل/,/القرن الأفريقي/,
-/arab/i,/arabe/i,/عرب/,/middle\s*east/i,/moyen[\s-]*orient/i,/الشرق\s*الأوسط/,
-/egypt/i,/égypt/i,/مصر/,/morocco/i,/maroc/i,/المغرب/,
-/algeria/i,/algérie/i,/الجزائر/,/tunisia/i,/tunisie/i,/تونس/,
-/libya/i,/libye/i,/ليبيا/,/syria/i,/syrie/i,/سوريا/,
-/iraq/i,/irak/i,/العراق/,/lebanon/i,/liban/i,/لبنان/,
-/yemen/i,/yémen/i,/اليمن/,/jordan/i,/الأردن/,
-/palestine/i,/فلسطين/,/saudi/i,/السعودية/,/qatar/i,/قطر/,
-/emirates|uae/i,/الإمارات/,/bahrain/i,/البحرين/,/kuwait/i,/الكويت/,
-/gulf\s*states/i,/الخليج/,/ottoman/i,/mena\b/i,
+const GEO_RX = [
+  /أفريق/, /africa/i, /afrique/i,
+  /nigeria/i, /ethiopia/i, /kenya/i, /ghana/i, /senegal/i, /tanzania/i, /uganda/i,
+  /cameroon/i, /congo/i, /mali\b/i, /niger\b/i, /burkina/i, /chad|tchad/i,
+  /sudan/i, /somalia/i, /eritrea/i, /djibouti/i, /rwanda/i, /mozambique/i,
+  /zimbabwe/i, /south\s*africa/i, /sahel/i, /maghreb/i, /horn\s*of\s*africa/i,
+  /ivory\s*coast|côte\s*d.ivoire/i, /liberia/i, /sierra\s*leone/i,
+  /guinea/i, /togo/i, /benin\b/i, /gambia/i, /cape\s*verde/i,
+  /zambia/i, /malawi/i, /botswana/i, /namibia/i, /angola/i,
+  /mauritania|mauritanie/i, /djibouti/i, /comoros/i,
+  /central\s*african\s*republic|centrafrique/i,
+  /نيجيري/, /إثيوب/, /كيني/, /غانا/, /سنغال/, /تنزاني/, /أوغند/,
+  /كونغو/, /مالي/, /السودان/, /الصومال/, /الساحل/, /القرن\s*الأفريقي/,
+  /arab/i, /arabe/i, /عرب/,
+  /middle\s*east/i, /moyen[\s-]*orient/i, /الشرق\s*الأوسط/,
+  /morocco/i, /maroc/i, /المغرب/,
+  /egypt/i, /égypt/i, /مصر/,
+  /tunisia/i, /tunisie/i, /تونس/,
+  /algeria/i, /algérie/i, /الجزائر/,
+  /syria/i, /syrie/i, /سوريا/,
+  /libya/i, /libye/i, /ليبيا/,
+  /lebanon/i, /liban/i, /لبنان/,
+  /iraq/i, /irak/i, /العراق/,
+  /jordan/i, /الأردن/,
+  /yemen/i, /yémen/i, /اليمن/,
+  /qatar/i, /قطر/,
+  /saudi/i, /السعودية/,
+  /palestine/i, /فلسطين/,
+  /kuwait/i, /الكويت/,
+  /bahrain/i, /البحرين/,
+  /emirates|uae/i, /الإمارات/,
+  /oman/i, /عُمان/,
+  /gulf\s*states/i, /الخليج/,
+  /mena\b/i,
+  /ottoman/i, /العثمان/,
+  /turkey|türkiye/i, /تركيا/,
+  /iran/i, /إيران/,
+  /israel/i, /إسرائيل/,
+  /mauritania/i, /موريتانيا/,
+  /western\s*sahara/i, /الصحراء\s*الغربية/
 ];
 
-function isRelevant(item){
- const h=((item.title||'')+' '+(item.description||'')+' '+(item.journal||'')).toLowerCase();
- let t=false,g=false;
- for(const r of TOPIC_RX){if(r.test(h)){t=true;break}}
- for(const r of GEO_RX){if(r.test(h)){g=true;break}}
- return t&&g;
+function isRelevant(item) {
+  const h = ((item.title || '') + ' ' + (item.description || '') + ' ' + (item.journal || '')).toLowerCase();
+  let t = false, g = false;
+  for (const r of TOPIC_RX) { if (r.test(h)) { t = true; break; } }
+  for (const r of GEO_RX) { if (r.test(h)) { g = true; break; } }
+  return t && g;
 }
 
-// ═══ الفلتر النهائي المركّب ═══
-function passesFilter(item){
- if(!isStrictBookReview(item)) return false;
- if(!isRelevant(item)) return false;
- return true;
+function passesFilter(item) {
+  if (!isStrictBookReview(item)) return false;
+  if (!isRelevant(item)) return false;
+  return true;
 }
 
-// ═══════════════════════════════════════════════════════════
-// أدوات
-// ═══════════════════════════════════════════════════════════
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
-function w2Y(d){return d&&(Date.now()-new Date(d).getTime())<=TY}
-function detectLang(t){
- if(!t)return'en';
- if(/[\u0600-\u06FF]/.test(t))return'ar';
- if(/[àâéèêëïîôùûüÿçœæ]/i.test(t)||/\b(compte|rendu|recension|politique|ouvrage|gouvern)\b/i.test(t))return'fr';
- return'en';
-}
-function escH(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
-function norm(s){return(s||'').toLowerCase().replace(/[^\w\s\u0600-\u06FF]/g,' ').replace(/\s+/g,' ').trim().substring(0,120)}
-function dedup(a){const s=new Set(),o=[];for(const i of a){const k=norm(i.title);if(!k||k.length<10||s.has(k))continue;s.add(k);o.push(i)}return o}
+// ══════════════════════════════════════════════════════════
+// أدوات مساعدة
+// ══════════════════════════════════════════════════════════
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function w2Y(d) { return d && (Date.now() - new Date(d).getTime()) <= TY; }
 
-function detectThemes(title,desc){
- const t=((title||'')+' '+(desc||'')).toLowerCase(),out=[];
- const m={
- 'politi|سياس|politiq':'Politics','govern|حكم|gouvern':'Governance',
- 'econom|اقتصاد|économi|development|تنمية':'Economy',
- 'democra|ديمقراط|démocrat|election|انتخاب':'Democracy',
- 'conflict|صراع|conflit|security|أمن|war|حرب|terror|إرهاب':'Conflict',
- 'international|relation|دولية|foreign|diplom|دبلوماس':'IR',
- 'شمال أفريق|north.africa|maghreb|المغرب العربي':'North Africa',
- 'ساحل|sahel':'Sahel','القرن الأفريقي|horn.africa|corne.afrique':'Horn of Africa',
- 'west.africa|afrique.ouest|أفريقيا الغربية':'West Africa',
- 'east.africa|afrique.est|أفريقيا الشرقية':'East Africa',
- 'خليج|gulf|golfe|قطر|سعود|إمارات':'Gulf',
- 'لبنان|سوري|عراق|أردن|فلسطين|المشرق|levant':'Levant',
- 'سودان|sudan|soudan':'Sudan','مصر|egypt|égypt':'Egypt',
- 'ليبي|libya':'Libya','مغرب|morocco|maroc':'Morocco',
- 'جزائر|algeria|algérie':'Algeria','تونس|tunisia':'Tunisia',
- };
- for(const[p,topic]of Object.entries(m)){if(new RegExp(p,'i').test(t))out.push(topic)}
- return out.length?out.slice(0,5):['General'];
+function detectLang(t) {
+  if (!t) return 'en';
+  if (/[\u0600-\u06FF]/.test(t)) return 'ar';
+  if (/[àâéèêëïîôùûüÿçœæ]/i.test(t) || /\b(compte|rendu|recension|politique|ouvrage|gouvern|afrique|économi)\b/i.test(t)) return 'fr';
+  return 'en';
 }
 
-function extractBook(title){
- let m;
- m=title.match(/^(?:book\s+)?review\s*[:—–\-]\s*(.+?)\.\s+by\s+(.+?)[\.,]/i);
- if(m)return{t:m[1],a:m[2]};
- m=title.match(/^(?:book\s+)?review\s*[:—–\-]\s*(.+?),\s+by\s+(.+)/i);
- if(m)return{t:m[1],a:m[2]};
- m=title.match(/^review\s+of\s+(.+?)\.\s+by\s+(.+?)[\.,]/i);
- if(m)return{t:m[1],a:m[2]};
- m=title.match(/^review\s+of\s+(.+?),\s+by\s+(.+)/i);
- if(m)return{t:m[1],a:m[2]};
- m=title.match(/^(.+?)\s+by\s+(.+?)\s*\((?:book\s+)?review\)/i);
- if(m)return{t:m[1],a:m[2]};
- m=title.match(/^reviewed?\s+works?\s*:\s*(.+?)\s*(?:by\s+(.+))?$/i);
- if(m)return{t:m[1],a:m[2]||''};
- m=title.match(/^comptes?\s+rendus?\s*(?:de|d['']|:)\s*(.+?)(?:\s*(?:,\s*(?:par|de)|par)\s+(.+))?$/i);
- if(m)return{t:m[1],a:m[2]||''};
- m=title.match(/^recension\s*(?:de|d['']|:)\s*(.+?)(?:\s*(?:,\s*(?:par|de)|par)\s+(.+))?$/i);
- if(m)return{t:m[1],a:m[2]||''};
- m=title.match(/^(?:مراجعة|عرض|قراءة|نقد)\s*(?:كتاب)?\s*[:«"]?\s*(.+?)(?:[»"]?\s*(?:ل[ـ]?|لـ|تأليف)\s*(.+))?$/);
- if(m)return{t:m[1],a:m[2]||''};
- // آخر محاولة: TITLE. By AUTHOR.
- m=title.match(/^(.{10,})\.\s+[Bb]y\s+(.{3,})$/);
- if(m)return{t:m[1],a:m[2]};
- return null;
+function escH(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
 }
 
-// ═══════════════════════════════════════════════════════════
-// استعلامات — صارمة جدًّا
-// ═══════════════════════════════════════════════════════════
-const Q={
-en:[
-'"book review" african politics','"book review" african governance',
-'"book review" african political economy','"book review" african democracy',
-'"book review" african conflict','"book review" african security',
-'"book review" african international relations','"book review" african state',
-'"book review" nigeria politics','"book review" ethiopia politics',
-'"book review" kenya governance','"book review" south africa political',
-'"book review" ghana democracy','"book review" senegal politics',
-'"book review" sudan conflict','"book review" somalia state',
-'"book review" sahel security','"book review" horn africa politics',
-'"book review" west africa governance','"book review" north africa politics',
-'"book review" african union','"book review" african peacekeeping',
-'"book review" african terrorism','"book review" african military',
-'"book review" african oil politics','"book review" african economy development',
-'"book review" china africa','"book review" france africa',
-'"book review" african corruption','"book review" african human rights',
-'"book review" african constitution','"book review" african nationalism',
-'"book review" middle east politics','"book review" arab politics',
-'"book review" arab political economy','"book review" arab democracy',
-'"book review" arab spring','"book review" egypt politics',
-'"book review" morocco governance','"book review" algeria politics',
-'"book review" tunisia transition','"book review" libya conflict',
-'"book review" syria politics','"book review" iraq political',
-'"book review" lebanon governance','"book review" yemen conflict',
-'"book review" jordan reform','"book review" palestine politics',
-'"book review" saudi arabia politics','"book review" qatar foreign policy',
-'"book review" gulf states governance','"book review" middle east security',
-'"book review" islamism politics','"book review" arab nationalism',
-'"book review" arab human rights','"book review" arab military',
-'"book review" middle east oil','"book review" arab refugees',
-// بنية واضحة
-'intitle:"book review" africa',
-'intitle:"book review" middle east',
-'intitle:"book review" arab',
-],
-fr:[
-'"compte rendu" politique africaine','"compte rendu" gouvernance afrique',
-'"compte rendu" économie politique africaine','"compte rendu" démocratie afrique',
-'"compte rendu" conflit afrique','"compte rendu" sécurité sahel',
-'"compte rendu" maghreb politique','"compte rendu" algérie politique',
-'"compte rendu" maroc gouvernance','"compte rendu" tunisie transition',
-'"compte rendu" égypte politique','"compte rendu" libye conflit',
-'"compte rendu" monde arabe politique','"compte rendu" moyen orient',
-'"compte rendu" printemps arabe','"compte rendu" syrie conflit',
-'"compte rendu" golfe politique','"compte rendu" terrorisme afrique',
-'"recension" politique africaine','"recension" gouvernance afrique',
-'"recension" maghreb politique','"recension" monde arabe',
-'"note de lecture" politique africaine','"note de lecture" monde arabe',
-],
-ar:[
-'"مراجعة كتاب" السياسة الأفريقية','"عرض كتاب" الحكم أفريقيا',
-'"مراجعة كتاب" الاقتصاد السياسي أفريقيا','"عرض كتاب" الديمقراطية أفريقيا',
-'"مراجعة كتاب" الصراعات أفريقيا','"عرض كتاب" الأمن أفريقيا',
-'"مراجعة كتاب" السودان','"عرض كتاب" نيجيريا',
-'"مراجعة كتاب" شمال أفريقيا','"عرض كتاب" المغرب العربي',
-'"مراجعة كتاب" السياسة العربية','"عرض كتاب" الحكم العالم العربي',
-'"مراجعة كتاب" الاقتصاد العربي','"عرض كتاب" الديمقراطية العربية',
-'"مراجعة كتاب" الربيع العربي','"عرض كتاب" مصر السياسة',
-'"مراجعة كتاب" المغرب السياسة','"عرض كتاب" الجزائر',
-'"مراجعة كتاب" تونس','"عرض كتاب" سوريا',
-'"مراجعة كتاب" العراق','"عرض كتاب" لبنان',
-'"مراجعة كتاب" الخليج','"عرض كتاب" الشرق الأوسط',
-'"قراءة في كتاب" السياسة أفريقيا','"قراءة نقدية" سياسة عربية',
-]
+function norm(s) {
+  return (s || '').toLowerCase().replace(/[^\w\s\u0600-\u06FF]/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 120);
+}
+
+function dedup(a) {
+  const s = new Set(), o = [];
+  for (const i of a) {
+    const k = norm(i.title);
+    if (!k || k.length < 10 || s.has(k)) continue;
+    s.add(k);
+    o.push(i);
+  }
+  return o;
+}
+
+function detectThemes(title, desc) {
+  const t = ((title || '') + ' ' + (desc || '')).toLowerCase(), out = [];
+  const m = {
+    'politi|سياس|politiq': 'Politics',
+    'govern|حكم|gouvern': 'Governance',
+    'state.build|بناء.الدولة|construction.de.l.état': 'State-Building',
+    'geopoliti|جيوسياس|géopoliti': 'Geopolitics',
+    'econom|اقتصاد|économi|development|تنمية': 'Economy',
+    'democra|ديمقراط|démocrat|election|انتخاب': 'Democracy',
+    'conflict|صراع|conflit|security|أمن|war|حرب|terror|إرهاب': 'Conflict',
+    'international|relation|دولية|foreign|diplom|دبلوماس': 'IR',
+    'securit|أمن|sécurité|military|عسكر': 'Security',
+    'migration|هجرة|migrat|refugee|لاجئ': 'Migration',
+    'human.rights|حقوق.الإنسان|droits.de.l.homme': 'Human Rights',
+    'north.africa|شمال.أفريق|maghreb|المغرب.العربي': 'North Africa',
+    'horn.africa|القرن.الأفريقي|corne.afrique': 'Horn of Africa',
+    'sahel|ساحل': 'Sahel',
+    'west.africa|أفريقيا.الغربية|afrique.ouest': 'West Africa',
+    'east.africa|أفريقيا.الشرقية|afrique.est': 'East Africa',
+    'central.africa|أفريقيا.الوسطى|afrique.centrale': 'Central Africa',
+    'southern.africa|جنوب.أفريقيا|afrique.australe': 'Southern Africa',
+    'gulf|خليج|golfe|قطر|سعود|إمارات|كويت|بحرين|عُمان': 'Gulf',
+    'levant|لبنان|سوري|عراق|أردن|فلسطين|المشرق': 'Levant',
+    'egypt|égypt|مصر': 'Egypt',
+    'sudan|soudan|سودان': 'Sudan',
+    'morocco|maroc|مغرب': 'Morocco',
+    'libya|ليبي': 'Libya',
+    'tunisia|تونس': 'Tunisia',
+    'algeria|algérie|جزائر': 'Algeria',
+    'turkey|türkiye|تركيا|ottoman|عثمان': 'Turkey',
+    'iran|إيران': 'Iran'
+  };
+  for (const [p, topic] of Object.entries(m)) {
+    if (new RegExp(p, 'i').test(t)) out.push(topic);
+  }
+  return out.length ? out.slice(0, 6) : ['General'];
+}
+
+function extractBook(title) {
+  let m;
+  m = title.match(/^(?:book\s+)?review\s*[:—–\-]\s*(.+?)\.\s+by\s+(.+?)[\.,]/i);
+  if (m) return { t: m[1], a: m[2] };
+  m = title.match(/^(?:book\s+)?review\s*[:—–\-]\s*(.+?),\s+by\s+(.+)/i);
+  if (m) return { t: m[1], a: m[2] };
+  m = title.match(/^review\s+of\s+(.+?)\.\s+by\s+(.+?)[\.,]/i);
+  if (m) return { t: m[1], a: m[2] };
+  m = title.match(/^review\s+of\s+(.+?),\s+by\s+(.+)/i);
+  if (m) return { t: m[1], a: m[2] };
+  m = title.match(/^(.+?)\s+by\s+(.+?)\s*\((?:book\s+)?review\)/i);
+  if (m) return { t: m[1], a: m[2] };
+  m = title.match(/^reviewed?\s+works?\s*:\s*(.+?)\s*(?:by\s+(.+))?$/i);
+  if (m) return { t: m[1], a: m[2] || '' };
+  m = title.match(/^comptes?\s+rendus?\s*(?:de|d['']|:)\s*(.+?)(?:\s*(?:,\s*(?:par|de)|par)\s+(.+))?$/i);
+  if (m) return { t: m[1], a: m[2] || '' };
+  m = title.match(/^recension\s*(?:de|d['']|:)\s*(.+?)(?:\s*(?:,\s*(?:par|de)|par)\s+(.+))?$/i);
+  if (m) return { t: m[1], a: m[2] || '' };
+  m = title.match(/^(?:مراجعة|عرض|قراءة|نقد)\s*(?:كتاب)?\s*[:\–—\-«""]?\s*(.+?)(?:\s*[،,]\s*(?:لـ?|تأليف)\s*(.+?))?[»""]*$/);
+  if (m) return { t: m[1], a: m[2] || '' };
+  m = title.match(/^(.{10,})\.\s+[Bb]y\s+(.{3,})$/);
+  if (m) return { t: m[1], a: m[2] };
+  return null;
+}
+
+// ══════════════════════════════════════════════════════════
+// الاستعلامات — موسَّعة جداً
+// ══════════════════════════════════════════════════════════
+const Q = {
+  en: [
+    // أفريقيا — السياسة والحكم
+    '"book review" african politics',
+    '"book review" african governance',
+    '"book review" african political economy',
+    '"book review" african democracy',
+    '"book review" african conflict',
+    '"book review" african security',
+    '"book review" african international relations',
+    '"book review" african state',
+    '"book review" state-building africa',
+    '"book review" statebuilding africa',
+    '"book review" peacebuilding africa',
+    '"book review" post-conflict africa',
+    '"book review" geopolitics africa',
+    '"book review" africa foreign policy',
+    // دول أفريقية
+    '"book review" nigeria politics',
+    '"book review" ethiopia politics',
+    '"book review" kenya governance',
+    '"book review" south africa political',
+    '"book review" ghana democracy',
+    '"book review" senegal politics',
+    '"book review" sudan conflict',
+    '"book review" somalia state',
+    '"book review" sahel security',
+    '"book review" horn africa politics',
+    '"book review" west africa governance',
+    '"book review" north africa politics',
+    '"book review" mali coup',
+    '"book review" burkina faso',
+    '"book review" niger politics',
+    '"book review" chad politics',
+    '"book review" cameroon governance',
+    '"book review" congo politics',
+    '"book review" rwanda governance',
+    '"book review" mozambique conflict',
+    '"book review" zimbabwe politics',
+    '"book review" angola politics',
+    '"book review" ivory coast politics',
+    '"book review" democratic republic congo',
+    // أفريقيا — موضوعات
+    '"book review" african union',
+    '"book review" african peacekeeping',
+    '"book review" african terrorism',
+    '"book review" african military',
+    '"book review" african oil politics',
+    '"book review" african economy development',
+    '"book review" china africa relations',
+    '"book review" france africa',
+    '"book review" africa colonialism',
+    '"book review" africa post-colonial',
+    '"book review" african corruption',
+    '"book review" african human rights',
+    '"book review" african constitution',
+    '"book review" african nationalism',
+    '"book review" africa migration',
+    '"book review" africa refugees',
+    '"book review" africa islamism',
+    '"book review" africa jihadism',
+    '"book review" africa coup',
+    '"book review" africa authoritarianism',
+    '"book review" africa civil war',
+    '"book review" africa elections',
+    '"book review" africa regional organization',
+    // الشرق الأوسط والعالم العربي
+    '"book review" middle east politics',
+    '"book review" arab politics',
+    '"book review" arab political economy',
+    '"book review" arab democracy',
+    '"book review" arab spring',
+    '"book review" egypt politics',
+    '"book review" morocco governance',
+    '"book review" algeria politics',
+    '"book review" tunisia transition',
+    '"book review" libya conflict',
+    '"book review" syria politics',
+    '"book review" iraq political',
+    '"book review" lebanon governance',
+    '"book review" yemen conflict',
+    '"book review" jordan reform',
+    '"book review" palestine politics',
+    '"book review" saudi arabia politics',
+    '"book review" qatar foreign policy',
+    '"book review" gulf states governance',
+    '"book review" middle east security',
+    '"book review" islamism politics',
+    '"book review" arab nationalism',
+    '"book review" arab human rights',
+    '"book review" arab military',
+    '"book review" middle east oil',
+    '"book review" arab refugees',
+    '"book review" middle east geopolitics',
+    '"book review" middle east state-building',
+    '"book review" arab authoritarianism',
+    '"book review" arab civil society',
+    '"book review" middle east colonialism',
+    '"book review" middle east post-colonial',
+    '"book review" iran middle east',
+    '"book review" turkey middle east',
+    '"book review" israel palestine',
+    '"book review" arab israeli conflict',
+    '"book review" political islam',
+    '"book review" islamist movements',
+    '"book review" jihadism middle east',
+    '"book review" MENA governance',
+    '"book review" MENA political economy',
+    '"book review" MENA security',
+    // العلاقات الدولية والجيوسياسة عاماً
+    '"book review" geopolitics africa middle east',
+    '"book review" international relations africa',
+    '"book review" international relations middle east',
+    '"book review" great power competition africa',
+    '"book review" russia africa',
+    '"book review" us africa policy',
+    '"book review" eu africa relations',
+    '"book review" global south politics',
+    // بنية واضحة في العنوان
+    'intitle:"book review" africa',
+    'intitle:"book review" middle east',
+    'intitle:"book review" arab'
+  ],
+  fr: [
+    // أفريقيا
+    '"compte rendu" politique africaine',
+    '"compte rendu" gouvernance afrique',
+    '"compte rendu" économie politique africaine',
+    '"compte rendu" démocratie afrique',
+    '"compte rendu" conflit afrique',
+    '"compte rendu" sécurité sahel',
+    '"compte rendu" construction état afrique',
+    '"compte rendu" géopolitique afrique',
+    '"compte rendu" relations internationales afrique',
+    '"compte rendu" post-colonial afrique',
+    // دول أفريقية
+    '"compte rendu" mali politique',
+    '"compte rendu" burkina faso',
+    '"compte rendu" niger politique',
+    '"compte rendu" tchad politique',
+    '"compte rendu" sahel sécurité',
+    '"compte rendu" afrique occidentale',
+    '"compte rendu" congo politique',
+    '"compte rendu" cameroun politique',
+    // المغرب العربي والشرق الأوسط
+    '"compte rendu" maghreb politique',
+    '"compte rendu" algérie politique',
+    '"compte rendu" maroc gouvernance',
+    '"compte rendu" tunisie transition',
+    '"compte rendu" égypte politique',
+    '"compte rendu" libye conflit',
+    '"compte rendu" monde arabe politique',
+    '"compte rendu" moyen orient',
+    '"compte rendu" printemps arabe',
+    '"compte rendu" syrie conflit',
+    '"compte rendu" golfe politique',
+    '"compte rendu" terrorisme afrique',
+    '"compte rendu" islamisme politique',
+    '"compte rendu" géopolitique moyen-orient',
+    '"compte rendu" relations france afrique',
+    // recensions
+    '"recension" politique africaine',
+    '"recension" gouvernance afrique',
+    '"recension" maghreb politique',
+    '"recension" monde arabe',
+    '"recension" moyen orient politique',
+    '"recension" géopolitique afrique',
+    // notes de lecture
+    '"note de lecture" politique africaine',
+    '"note de lecture" monde arabe',
+    '"note de lecture" géopolitique'
+  ],
+  ar: [
+    '"مراجعة كتاب" السياسة الأفريقية',
+    '"عرض كتاب" الحكم أفريقيا',
+    '"مراجعة كتاب" الاقتصاد السياسي أفريقيا',
+    '"عرض كتاب" الديمقراطية أفريقيا',
+    '"مراجعة كتاب" الصراعات أفريقيا',
+    '"عرض كتاب" الأمن أفريقيا',
+    '"مراجعة كتاب" السودان',
+    '"عرض كتاب" نيجيريا',
+    '"مراجعة كتاب" شمال أفريقيا',
+    '"عرض كتاب" المغرب العربي',
+    '"مراجعة كتاب" بناء الدولة أفريقيا',
+    '"مراجعة كتاب" الجيوسياسة أفريقيا',
+    '"مراجعة كتاب" العلاقات الدولية أفريقيا',
+    '"مراجعة كتاب" السياسة العربية',
+    '"عرض كتاب" الحكم العالم العربي',
+    '"مراجعة كتاب" الاقتصاد العربي',
+    '"عرض كتاب" الديمقراطية العربية',
+    '"مراجعة كتاب" الربيع العربي',
+    '"عرض كتاب" مصر السياسة',
+    '"مراجعة كتاب" المغرب السياسة',
+    '"عرض كتاب" الجزائر',
+    '"مراجعة كتاب" تونس',
+    '"عرض كتاب" سوريا',
+    '"مراجعة كتاب" العراق',
+    '"عرض كتاب" لبنان',
+    '"مراجعة كتاب" الخليج',
+    '"عرض كتاب" الشرق الأوسط',
+    '"مراجعة كتاب" الجيوسياسة الشرق الأوسط',
+    '"مراجعة كتاب" العلاقات الدولية العالم العربي',
+    '"مراجعة كتاب" بناء الدولة الشرق الأوسط',
+    '"مراجعة كتاب" الإسلام السياسي',
+    '"مراجعة كتاب" الحركات الإسلامية',
+    '"مراجعة كتاب" الأمن الإقليمي',
+    '"قراءة في كتاب" السياسة أفريقيا',
+    '"قراءة نقدية" سياسة عربية',
+    '"قراءة في كتاب" العلاقات الدولية',
+    '"قراءة في كتاب" الجيوسياسة'
+  ]
 };
 
-// ═══════════════════════════════════════════════════════════
-// Crossref — نطلب type=book-review أيضًا
-// ═══════════════════════════════════════════════════════════
-async function crFetch(query){
- const out=[];
- try{
-  const from=new Date(Date.now()-TY);
-  const fd=`${from.getFullYear()}-${String(from.getMonth()+1).padStart(2,'0')}-01`;
-
-  // محاولة 1: type = book-review
-  for(const typeFilter of [`from-pub-date:${fd},type:book-review`, `from-pub-date:${fd}`]) {
-   const p=new URLSearchParams({
-    'query.bibliographic':query,rows:'50',sort:'published',order:'desc',
-    filter:typeFilter,
-    select:'DOI,title,author,published-print,published-online,container-title,type,abstract,URL,subject,page,volume,issue,publisher'
-   });
-   try{
-    const r=await fetch(`https://api.crossref.org/works?${p}`,{
-     headers:{'User-Agent':'StrictBookReviewObservatory/4.0 (mailto:research@observatory.org)'}
-    });
-    if(!r.ok)continue;
-    const d=await r.json();
-    for(const w of(d.message?.items||[])){
-     const title=(w.title||[])[0]||'';
-     if(!title||title.length<12)continue;
-     const pp=w['published-print']?.['date-parts']?.[0]||w['published-online']?.['date-parts']?.[0]||[];
-     const pd=pp.length>=1?`${pp[0]}-${String(pp[1]||1).padStart(2,'0')}-${String(pp[2]||1).padStart(2,'0')}`:'';
-     if(!w2Y(pd))continue;
-     out.push({
-      id:'cr_'+w.DOI,title,
-      authors:(w.author||[]).map(a=>[a.given,a.family].filter(Boolean).join(' ')).slice(0,5),
-      journal:(w['container-title']||[])[0]||'',
-      publisher:w.publisher||'',publication_date:pd,
-      doi:w.DOI||'',url:w.URL||(w.DOI?`https://doi.org/${w.DOI}`:''),
-      description:(w.abstract||'').replace(/<[^>]*>/g,'').substring(0,500),
-      language:detectLang(title+' '+((w['container-title']||[])[0]||'')),
-      topics:detectThemes(title,(w.abstract||'')+' '+(w.subject||[]).join(' ')),
-      source:'Crossref',volume:w.volume||'',issue:w.issue||'',pages:w.page||'',
-      _ctype:w.type||'',
-     });
+// ══════════════════════════════════════════════════════════
+// Crossref
+// ══════════════════════════════════════════════════════════
+async function crFetch(query) {
+  const out = [];
+  try {
+    const from = new Date(Date.now() - TY);
+    const fd = `${from.getFullYear()}-${String(from.getMonth() + 1).padStart(2, '0')}-01`;
+    for (const typeFilter of [`from-pub-date:${fd},type:book-review`, `from-pub-date:${fd}`]) {
+      const p = new URLSearchParams({
+        'query.bibliographic': query,
+        rows: '50',
+        sort: 'published',
+        order: 'desc',
+        filter: typeFilter,
+        select: 'DOI,title,author,published-print,published-online,container-title,type,abstract,URL,subject,page,volume,issue,publisher'
+      });
+      try {
+        const r = await fetch(`https://api.crossref.org/works?${p}`, {
+          headers: { 'User-Agent': 'StrictBookReviewObservatory/8.0 (mailto:research@observatory.org)' }
+        });
+        if (!r.ok) continue;
+        const d = await r.json();
+        for (const w of (d.message?.items || [])) {
+          const title = (w.title || [])[0] || '';
+          if (!title || title.length < 12) continue;
+          const pp = w['published-print']?.['date-parts']?.[0] || w['published-online']?.['date-parts']?.[0] || [];
+          const pd = pp.length >= 1 ? `${pp[0]}-${String(pp[1] || 1).padStart(2, '0')}-${String(pp[2] || 1).padStart(2, '0')}` : '';
+          if (!w2Y(pd)) continue;
+          out.push({
+            id: 'cr_' + w.DOI, title,
+            authors: (w.author || []).map(a => [a.given, a.family].filter(Boolean).join(' ')).slice(0, 5),
+            journal: (w['container-title'] || [])[0] || '',
+            publisher: w.publisher || '', publication_date: pd,
+            doi: w.DOI || '', url: w.URL || (w.DOI ? `https://doi.org/${w.DOI}` : ''),
+            description: (w.abstract || '').replace(/<[^>]*>/g, '').substring(0, 500),
+            language: detectLang(title + ' ' + ((w['container-title'] || [])[0] || '')),
+            topics: detectThemes(title, (w.abstract || '') + ' ' + (w.subject || []).join(' ')),
+            source: 'Crossref', volume: w.volume || '', issue: w.issue || '', pages: w.page || '',
+            _ctype: w.type || ''
+          });
+        }
+      } catch (e) {}
+      if (typeFilter.includes('book-review') && out.length > 0) break;
     }
-   }catch(e){}
-   if(typeFilter.includes('book-review') && out.length>0) break; // إذا وجدنا book-review لا حاجة للبحث العام
-  }
- }catch(e){console.warn('CR:',e)}
- return out;
+  } catch (e) { console.warn('CR:', e); }
+  return out;
 }
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // OpenAlex
-// ═══════════════════════════════════════════════════════════
-async function oaFetch(query){
- const out=[];
- try{
-  const from=new Date(Date.now()-TY);
-  const fd=`${from.getFullYear()}-${String(from.getMonth()+1).padStart(2,'0')}-01`;
-  const p=new URLSearchParams({search:query,per_page:'50',sort:'publication_date:desc',filter:`from_publication_date:${fd}`});
-  const r=await fetch(`https://api.openalex.org/works?${p}`,{headers:{'User-Agent':'mailto:research@observatory.org'}});
-  if(!r.ok)return out;
-  const d=await r.json();
-  for(const w of(d.results||[])){
-   const title=w.title||'';if(!title||title.length<12)continue;
-   const pd=w.publication_date||'';if(!w2Y(pd))continue;
-   out.push({
-    id:'oa_'+(w.id||'').replace('https://openalex.org/',''),title,
-    authors:(w.authorships||[]).map(a=>a.author?.display_name||'').filter(Boolean).slice(0,5),
-    journal:(w.primary_location?.source?.display_name)||'',
-    publisher:(w.primary_location?.source?.host_organization_name)||'',
-    publication_date:pd,doi:(w.doi||'').replace('https://doi.org/',''),
-    url:w.primary_location?.landing_page_url||w.doi||'',
-    description:'',language:detectLang(title),
-    topics:detectThemes(title,(w.concepts||[]).map(c=>c.display_name).join(' ')),
-    source:'OpenAlex',volume:'',issue:'',pages:'',
-    cited_by:w.cited_by_count||0,_ctype:w.type||'',
-   });
-  }
- }catch(e){console.warn('OA:',e)}
- return out;
+// ══════════════════════════════════════════════════════════
+async function oaFetch(query) {
+  const out = [];
+  try {
+    const from = new Date(Date.now() - TY);
+    const fd = `${from.getFullYear()}-${String(from.getMonth() + 1).padStart(2, '0')}-01`;
+    const p = new URLSearchParams({
+      search: query, per_page: '50', sort: 'publication_date:desc',
+      filter: `from_publication_date:${fd}`
+    });
+    const r = await fetch(`https://api.openalex.org/works?${p}`, {
+      headers: { 'User-Agent': 'mailto:research@observatory.org' }
+    });
+    if (!r.ok) return out;
+    const d = await r.json();
+    for (const w of (d.results || [])) {
+      const title = w.title || '';
+      if (!title || title.length < 12) continue;
+      const pd = w.publication_date || '';
+      if (!w2Y(pd)) continue;
+      out.push({
+        id: 'oa_' + (w.id || '').replace('https://openalex.org/', ''), title,
+        authors: (w.authorships || []).map(a => a.author?.display_name || '').filter(Boolean).slice(0, 5),
+        journal: w.primary_location?.source?.display_name || '',
+        publisher: w.primary_location?.source?.host_organization_name || '',
+        publication_date: pd, doi: (w.doi || '').replace('https://doi.org/', ''),
+        url: w.primary_location?.landing_page_url || w.doi || '',
+        description: '', language: detectLang(title),
+        topics: detectThemes(title, (w.concepts || []).map(c => c.display_name).join(' ')),
+        source: 'OpenAlex', volume: '', issue: '', pages: '',
+        cited_by: w.cited_by_count || 0, _ctype: w.type || ''
+      });
+    }
+  } catch (e) { console.warn('OA:', e); }
+  return out;
 }
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════
 // Semantic Scholar
-// ═══════════════════════════════════════════════════════════
-async function s2Fetch(query){
- const out=[];
- try{
-  const cy=new Date().getFullYear();
-  const p=new URLSearchParams({query,limit:'40',
-   fields:'title,authors,year,externalIds,url,abstract,venue,publicationDate,citationCount',
-   year:`${cy-2}-${cy}`});
-  const r=await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?${p}`);
-  if(!r.ok)return out;
-  const d=await r.json();
-  for(const w of(d.data||[])){
-   const title=w.title||'';if(!title||title.length<12)continue;
-   const pd=w.publicationDate||(w.year?`${w.year}-01-01`:'');
-   if(!w2Y(pd))continue;
-   out.push({
-    id:'ss_'+w.paperId,title,
-    authors:(w.authors||[]).map(a=>a.name).slice(0,5),
-    journal:w.venue||'',publisher:'',publication_date:pd,
-    doi:w.externalIds?.DOI||'',url:w.url||'',
-    description:(w.abstract||'').substring(0,500),
-    language:detectLang(title),topics:detectThemes(title,w.abstract||''),
-    source:'Semantic Scholar',volume:'',issue:'',pages:'',
-    cited_by:w.citationCount||0,_ctype:'',
-   });
+// ══════════════════════════════════════════════════════════
+async function s2Fetch(query) {
+  const out = [];
+  try {
+    const cy = new Date().getFullYear();
+    const p = new URLSearchParams({
+      query, limit: '40',
+      fields: 'title,authors,year,externalIds,url,abstract,venue,publicationDate,citationCount',
+      year: `${cy - 2}-${cy}`
+    });
+    const r = await fetch(`https://api.semanticscholar.org/graph/v1/paper/search?${p}`);
+    if (!r.ok) return out;
+    const d = await r.json();
+    for (const w of (d.data || [])) {
+      const title = w.title || '';
+      if (!title || title.length < 12) continue;
+      const pd = w.publicationDate || (w.year ? `${w.year}-01-01` : '');
+      if (!w2Y(pd)) continue;
+      out.push({
+        id: 'ss_' + w.paperId, title,
+        authors: (w.authors || []).map(a => a.name).slice(0, 5),
+        journal: w.venue || '', publisher: '', publication_date: pd,
+        doi: w.externalIds?.DOI || '', url: w.url || '',
+        description: (w.abstract || '').substring(0, 500),
+        language: detectLang(title),
+        topics: detectThemes(title, w.abstract || ''),
+        source: 'Semantic Scholar', volume: '', issue: '', pages: '',
+        cited_by: w.citationCount || 0, _ctype: ''
+      });
+    }
+  } catch (e) { console.warn('S2:', e); }
+  return out;
+}
+
+// ══════════════════════════════════════════════════════════
+// المحرك الرئيسي
+// ══════════════════════════════════════════════════════════
+async function fetchAll() {
+  document.getElementById('progressBar').style.display = 'block';
+  document.getElementById('refreshBtn').disabled = true;
+  document.getElementById('grid').innerHTML = '<div class="loader"><div class="spinner"></div><p>جارٍ جلب مراجعات الكتب بفلترة فائقة الصرامة...</p></div>';
+
+  const raw = [];
+  REJECTED = 0;
+  const tasks = [];
+
+  for (const q of Q.en) tasks.push({ q, api: 'cr' });
+  for (const q of Q.fr) tasks.push({ q, api: 'cr' });
+  for (const q of Q.ar) tasks.push({ q, api: 'cr' });
+  for (const q of Q.en.slice(0, 30)) tasks.push({ q, api: 'oa' });
+  for (const q of Q.fr.slice(0, 15)) tasks.push({ q, api: 'oa' });
+  for (const q of Q.ar.slice(0, 15)) tasks.push({ q, api: 'oa' });
+  for (const q of Q.en.slice(0, 20)) tasks.push({ q, api: 's2' });
+
+  const tot = tasks.length;
+  let step = 0;
+
+  for (const { q, api } of tasks) {
+    step++;
+    upProg(step, tot, `${api}: ${q.substring(0, 40)}...`);
+    let res = [];
+    try {
+      if (api === 'cr') res = await crFetch(q);
+      else if (api === 'oa') res = await oaFetch(q);
+      else if (api === 's2') res = await s2Fetch(q);
+    } catch (e) {}
+    raw.push(...res);
+    await sleep(api === 's2' ? 700 : api === 'cr' ? 450 : 300);
   }
- }catch(e){console.warn('S2:',e)}
- return out;
+
+  upProg(tot, tot, 'تطبيق الفلترة فائقة الصرامة (4 مستويات)...');
+  await sleep(300);
+
+  const accepted = [];
+  for (const item of raw) {
+    if (passesFilter(item)) accepted.push(item);
+    else REJECTED++;
+  }
+
+  console.log('🔍 فلترة فائقة الصرامة:');
+  console.log(`إجمالي خام: ${raw.length}`);
+  console.log(`مقبول: ${accepted.length}`);
+  console.log(`مستبعد: ${REJECTED}`);
+  console.log(`نسبة الاستبعاد: ${raw.length ? Math.round(REJECTED / raw.length * 100) : 0}%`);
+
+  ALL = dedup(accepted).filter(it => w2Y(it.publication_date));
+  ALL.sort((a, b) => new Date(b.publication_date) - new Date(a.publication_date));
+
+  try {
+    localStorage.setItem(CK, JSON.stringify({ items: ALL, rejected: REJECTED, ts: Date.now() }));
+  } catch (e) {}
+
+  document.getElementById('progressBar').style.display = 'none';
+  document.getElementById('refreshBtn').disabled = false;
+  upStats();
+  filterItems();
+  upTime();
 }
 
-// ═══════════════════════════════════════════════════════════
-// المحرك
-// ═══════════════════════════════════════════════════════════
-async function fetchAll(){
- document.getElementById('progressBar').style.display='block';
- document.getElementById('refreshBtn').disabled=true;
- document.getElementById('grid').innerHTML='<div class="loader"><div class="spinner"></div><p>جارٍ جلب مراجعات الكتب بفلترة فائقة الصرامة...</p></div>';
- const raw=[];REJECTED=0;
-
- const tasks=[];
- for(const q of Q.en)tasks.push({q,api:'cr'});
- for(const q of Q.fr)tasks.push({q,api:'cr'});
- for(const q of Q.ar)tasks.push({q,api:'cr'});
- for(const q of Q.en.slice(0,25))tasks.push({q,api:'oa'});
- for(const q of Q.fr.slice(0,12))tasks.push({q,api:'oa'});
- for(const q of Q.ar.slice(0,12))tasks.push({q,api:'oa'});
- for(const q of Q.en.slice(0,15))tasks.push({q,api:'s2'});
-
- const tot=tasks.length;let step=0;
- for(const{q,api}of tasks){
-  step++;upProg(step,tot,`${api}: ${q.substring(0,38)}...`);
-  let res=[];
-  try{
-   if(api==='cr')res=await crFetch(q);
-   else if(api==='oa')res=await oaFetch(q);
-   else if(api==='s2')res=await s2Fetch(q);
-  }catch(e){}
-  raw.push(...res);
-  await sleep(api==='s2'?700:api==='cr'?450:300);
- }
-
- upProg(tot,tot,'تطبيق الفلترة فائقة الصرامة (4 مستويات)...');
- await sleep(300);
-
- const accepted=[];
- for(const item of raw){
-  if(passesFilter(item)) accepted.push(item);
-  else REJECTED++;
- }
-
- console.log(`🔍 فلترة فائقة الصرامة:`);
- console.log(`   إجمالي خام: ${raw.length}`);
- console.log(`   مقبول: ${accepted.length}`);
- console.log(`   مستبعد: ${REJECTED}`);
- console.log(`   نسبة الاستبعاد: ${raw.length?Math.round(REJECTED/raw.length*100):0}%`);
-
- ALL=dedup(accepted).filter(it=>w2Y(it.publication_date));
- ALL.sort((a,b)=>new Date(b.publication_date)-new Date(a.publication_date));
-
- try{localStorage.setItem(CK,JSON.stringify({items:ALL,rejected:REJECTED,ts:Date.now()}))}catch(e){}
- document.getElementById('progressBar').style.display='none';
- document.getElementById('refreshBtn').disabled=false;
- upStats();filterItems();upTime();
+function upProg(c, t, s) {
+  const p = Math.round(c / t * 100);
+  document.getElementById('progressFill').style.width = p + '%';
+  document.getElementById('progressText').textContent = `⬇️ ${p}% — ${s}`;
 }
 
-function upProg(c,t,s){
- const p=Math.round(c/t*100);
- document.getElementById('progressFill').style.width=p+'%';
- document.getElementById('progressText').textContent=`📥 ${p}% — ${s}`;
+function setLang(l, btn) {
+  currentLang = l;
+  document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn');
+  if (l === 'all') btn.classList.add('active');
+  else btn.classList.add('active-' + l);
+  filterItems();
 }
 
-function setLang(l,btn){
- currentLang=l;
- document.querySelectorAll('.filter-btn').forEach(b=>b.className='filter-btn');
- if(l==='all')btn.classList.add('active');else btn.classList.add('active-'+l);
- filterItems();
+function filterItems() {
+  const s = document.getElementById('searchInput').value.toLowerCase();
+  const topic = document.getElementById('themeSelect').value;
+  const sort = document.getElementById('sortSelect').value;
+
+  let f = ALL.filter(it => {
+    if (currentLang !== 'all' && it.language !== currentLang) return false;
+    if (topic && !it.topics.some(t => t.toLowerCase().includes(topic.toLowerCase()))) return false;
+    if (s) {
+      const h = (it.title + ' ' + (it.authors || []).join(' ') + ' ' + it.journal + ' ' + it.description).toLowerCase();
+      if (!h.includes(s)) return false;
+    }
+    return true;
+  });
+
+  if (sort === 'title') f.sort((a, b) => a.title.localeCompare(b.title, 'ar'));
+  else f.sort((a, b) => new Date(b.publication_date) - new Date(a.publication_date));
+
+  render(f);
 }
 
-function filterItems(){
- const s=document.getElementById('searchInput').value.toLowerCase();
- const topic=document.getElementById('themeSelect').value;
- const sort=document.getElementById('sortSelect').value;
- let f=ALL.filter(it=>{
-  if(currentLang!=='all'&&it.language!==currentLang)return false;
-  if(topic&&!it.topics.some(t=>t.toLowerCase().includes(topic.toLowerCase())))return false;
-  if(s){const h=(it.title+' '+(it.authors||[]).join(' ')+' '+it.journal+' '+it.description).toLowerCase();if(!h.includes(s))return false}
-  return true;
- });
- if(sort==='title')f.sort((a,b)=>a.title.localeCompare(b.title,'ar'));
- else f.sort((a,b)=>new Date(b.publication_date)-new Date(a.publication_date));
- render(f);
+function render(items) {
+  const g = document.getElementById('grid');
+  if (!items.length) {
+    g.innerHTML = '<div class="no-results"><div class="emoji">📭</div><p>لا توجد مراجعات كتب مطابقة</p></div>';
+    return;
+  }
+
+  g.innerHTML = items.map(it => {
+    const ll = it.language === 'ar' ? 'عربي' : it.language === 'fr' ? 'Français' : 'English';
+    const date = it.publication_date ? new Date(it.publication_date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : '';
+    const url = it.url || (it.doi ? `https://doi.org/${it.doi}` : '');
+    const rb = extractBook(it.title);
+    const mt = it.topics.find(t => ['Politics', 'Governance', 'Economy', 'Democracy', 'Conflict', 'IR', 'Geopolitics', 'State-Building', 'Security', 'Migration'].includes(t));
+    const tb = mt ? {
+      Politics: 'b-politics', Governance: 'b-governance', Economy: 'b-economy',
+      Democracy: 'b-politics', Conflict: 'b-economy', IR: 'b-governance',
+      Geopolitics: 'b-politics', 'State-Building': 'b-governance',
+      Security: 'b-economy', Migration: 'b-governance'
+    }[mt] : 'b-politics';
+    const tl = mt ? {
+      Politics: '🏛️ سياسة', Governance: '🏢 حكم', Economy: '💰 اقتصاد',
+      Democracy: '🗳️ ديمقراطية', Conflict: '⚔️ صراعات', IR: '🌐 علاقات دولية',
+      Geopolitics: '🗺️ جيوسياسة', 'State-Building': '🏗️ بناء الدولة',
+      Security: '🛡️ أمن', Migration: '🚶 هجرة'
+    }[mt] : '🏛️ سياسة';
+
+    return `
+<div class="card">
+  <div class="card-head">
+    <div class="badge-row">
+      <span class="badge b-review">📋 مراجعة كتاب</span>
+      <span class="badge ${tb}">${tl}</span>
+      <span class="badge b-${it.language}">${ll}</span>
+      <span class="badge b-src">${escH(it.source)}</span>
+    </div>
+    <div class="card-title">${escH(it.title)}</div>
+    ${rb ? `<div class="reviewed-book"><div class="rb-label">🔴 الكتاب المُراجَع:</div>
+      <div class="rb-title">${escH(rb.t)}</div>${rb.a ? `<div class="rb-author">✍️ ${escH(rb.a)}</div>` : ''}</div>` : ''}
+  </div>
+  <div class="card-authors">✍️ المراجع: ${escH((it.authors || []).join('، ') || '—')}</div>
+  ${it.journal ? `<div class="card-journal">📰 ${escH(it.journal)}</div>` : ''}
+  <div class="card-meta">
+    ${date ? `<span>📅 ${date}</span>` : ''}
+    ${it.volume ? `<span>مج ${escH(it.volume)}</span>` : ''}
+    ${it.issue ? `<span>ع ${escH(it.issue)}</span>` : ''}
+    ${it.pages ? `<span>ص ${escH(it.pages)}</span>` : ''}
+    ${it.cited_by ? `<span>📊 ${it.cited_by}</span>` : ''}
+  </div>
+  <div class="card-body">
+    ${it.description ? `<div class="card-desc">${escH(it.description)}</div>` : ''}
+    <div class="card-topics">${it.topics.slice(0, 6).map(t => `<span class="topic">${escH(t)}</span>`).join('')}</div>
+    <div class="card-actions">
+      ${url ? `<a href="${escH(url)}" target="_blank" rel="noopener" class="btn btn-p">🔗 قراءة المراجعة</a>` : ''}
+      ${it.doi ? `<a href="https://doi.org/${escH(it.doi)}" target="_blank" rel="noopener" class="btn btn-s">DOI</a>` : ''}
+      <a href="https://scholar.google.com/scholar?q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener" class="btn btn-s">Scholar</a>
+    </div>
+  </div>
+</div>`;
+  }).join('');
 }
 
-function render(items){
- const g=document.getElementById('grid');
- if(!items.length){g.innerHTML='<div class="no-results"><div class="emoji">📖</div><p>لا توجد مراجعات كتب مطابقة</p></div>';return}
- g.innerHTML=items.map(it=>{
-  const ll=it.language==='ar'?'عربي':it.language==='fr'?'Français':'English';
-  const date=it.publication_date?new Date(it.publication_date).toLocaleDateString('en-US',{year:'numeric',month:'short'}):'';
-  const url=it.url||(it.doi?`https://doi.org/${it.doi}`:'');
-  const rb=extractBook(it.title);
-  const mt=it.topics.find(t=>['Politics','Governance','Economy','Democracy','Conflict','IR'].includes(t));
-  const tb=mt?{Politics:'b-politics',Governance:'b-governance',Economy:'b-economy',Democracy:'b-politics',Conflict:'b-economy',IR:'b-governance'}[mt]:'b-politics';
-  const tl=mt?{Politics:'🏛️ سياسة',Governance:'⚖️ حكم',Economy:'💰 اقتصاد',Democracy:'🗳️ ديمقراطية',Conflict:'⚔️ صراعات',IR:'🌐 علاقات دولية'}[mt]:'🏛️ سياسة';
-  return `
-  <div class="card">
-   <div class="card-head">
-   <div class="badge-row">
-    <span class="badge b-review">📖 مراجعة كتاب</span>
-    <span class="badge ${tb}">${tl}</span>
-    <span class="badge b-${it.language}">${ll}</span>
-    <span class="badge b-src">${escH(it.source)}</span>
-   </div>
-   <div class="card-title">${escH(it.title)}</div>
-   ${rb?`<div class="reviewed-book"><div class="rb-label">📕 الكتاب المُراجَع:</div><div class="rb-title">${escH(rb.t)}</div>${rb.a?`<div class="rb-author">✍ ${escH(rb.a)}</div>`:''}</div>`:''}
-   <div class="card-authors">✍ المراجِع: ${escH((it.authors||[]).join('، ')||'—')}</div>
-   ${it.journal?`<div class="card-journal">📰 ${escH(it.journal)}</div>`:''}
-   <div class="card-meta">
-    ${date?`<span>📅 ${date}</span>`:''}
-    ${it.volume?`<span>مج ${escH(it.volume)}</span>`:''}
-    ${it.issue?`<span>ع ${escH(it.issue)}</span>`:''}
-    ${it.pages?`<span>ص ${escH(it.pages)}</span>`:''}
-    ${it.cited_by?`<span>📊 ${it.cited_by}</span>`:''}
-   </div>
-   </div>
-   <div class="card-body">
-   ${it.description?`<div class="card-desc">${escH(it.description)}</div>`:''}
-   <div class="card-topics">${it.topics.slice(0,5).map(t=>`<span class="topic">${escH(t)}</span>`).join('')}</div>
-   <div class="card-actions">
-    ${url?`<a href="${escH(url)}" target="_blank" rel="noopener" class="btn btn-p">🔗 قراءة المراجعة</a>`:''}
-    ${it.doi?`<a href="https://doi.org/${escH(it.doi)}" target="_blank" rel="noopener" class="btn btn-s">DOI</a>`:''}
-    <a href="https://scholar.google.com/scholar?q=${encodeURIComponent(it.title)}" target="_blank" rel="noopener" class="btn btn-s">Scholar</a>
-   </div>
-   </div>
-  </div>`;
- }).join('');
+function upStats() {
+  document.getElementById('totalCount').textContent = ALL.length;
+  document.getElementById('arCount').textContent = ALL.filter(i => i.language === 'ar').length;
+  document.getElementById('frCount').textContent = ALL.filter(i => i.language === 'fr').length;
+  document.getElementById('enCount').textContent = ALL.filter(i => i.language === 'en').length;
+  document.getElementById('journalCount').textContent = new Set(ALL.map(i => i.journal).filter(Boolean)).size;
+  document.getElementById('rejectedCount').textContent = REJECTED;
 }
 
-function upStats(){
- document.getElementById('totalCount').textContent=ALL.length;
- document.getElementById('arCount').textContent=ALL.filter(i=>i.language==='ar').length;
- document.getElementById('frCount').textContent=ALL.filter(i=>i.language==='fr').length;
- document.getElementById('enCount').textContent=ALL.filter(i=>i.language==='en').length;
- document.getElementById('journalCount').textContent=new Set(ALL.map(i=>i.journal).filter(Boolean)).size;
- document.getElementById('rejectedCount').textContent=REJECTED;
+function upTime() {
+  document.getElementById('lastUpdate').textContent = 'آخر تحديث: ' +
+    new Date().toLocaleString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
-function upTime(){document.getElementById('lastUpdate').textContent='آخر تحديث: '+new Date().toLocaleString('ar-EG',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'})}
-function toggleSrc(){const e=document.getElementById('srcList');e.classList.toggle('open');if(e.classList.contains('open')&&!e.innerHTML)e.innerHTML=JOURNALS.map((s,i)=>`${i+1}. ${s}`).join('<br>')}
-function manualRefresh(){localStorage.removeItem(CK);fetchAll()}
 
-(async function(){
- try{const c=JSON.parse(localStorage.getItem(CK));
- if(c&&(Date.now()-c.ts)<CMS){ALL=(c.items||[]).filter(it=>w2Y(it.publication_date));REJECTED=c.rejected||0;upStats();filterItems();upTime();console.log('✅',ALL.length);setTimeout(fetchAll,CMS-(Date.now()-c.ts));return}}catch(e){}
- await fetchAll();
+function toggleSrc() {
+  const e = document.getElementById('srcList');
+  e.classList.toggle('open');
+  if (e.classList.contains('open') && !e.innerHTML) {
+    e.innerHTML = JOURNALS.map((s, i) => `${i + 1}. ${s}`).join('<br>');
+  }
+}
+
+function manualRefresh() {
+  localStorage.removeItem(CK);
+  fetchAll();
+}
+
+// التشغيل الأولي
+(async function () {
+  try {
+    const c = JSON.parse(localStorage.getItem(CK));
+    if (c && (Date.now() - c.ts) < CMS) {
+      ALL = (c.items || []).filter(it => w2Y(it.publication_date));
+      REJECTED = c.rejected || 0;
+      upStats();
+      filterItems();
+      upTime();
+      console.log('✅', ALL.length);
+      setTimeout(fetchAll, CMS - (Date.now() - c.ts));
+      return;
+    }
+  } catch (e) {}
+  await fetchAll();
 })();
-setInterval(()=>{console.log('🔄');fetchAll()},CMS);
+
+setInterval(() => { console.log('🔄'); fetchAll(); }, CMS);
 </script>
 </body>
 </html>
